@@ -1,5 +1,5 @@
 # QuAC-Compiler
-Compiles QuAC 16bit assembly into QuAC v1.0 ISA binaries
+Compiles QuAC assembly into 16-bit QuAC v1.0 ISA binaries
 
 ## Build
 
