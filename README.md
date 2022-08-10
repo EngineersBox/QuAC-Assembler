@@ -4,7 +4,7 @@ Compiles QuAC assembly into 16-bit QuAC v1.0 ISA binaries
 ## Build
 
 ```shell
-go build src/main.go
+go build src/compiler.go
 ```
 
 ## Usage
@@ -12,13 +12,13 @@ go build src/main.go
 You'll need to build the compiler first before doing this, see the above section for details on that.
 
 ```shell
-./main <source asm> <dest binary>
+./compiler <source assembly> <destination binary>
 ```
 
 ### Example
 
 ```shell
-./main test.S result.bin
+./compiler test.S result.bin
 ```
 
 This will compile the following assembly
