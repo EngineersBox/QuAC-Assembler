@@ -199,6 +199,7 @@ func parseRFormatALU(args []string) (uint16, error) {
 	var insn uint16 = 0
 	var registers []uint8 = make([]uint8, 3)
 	for i, arg := range args {
+		fmt.Println(arg)
 		reg, err := parseRegister(arg)
 		if err != nil {
 			return 0, err
@@ -206,7 +207,8 @@ func parseRFormatALU(args []string) (uint16, error) {
 			return 0, err
 		}
 		registers[i] = reg
-		insn |= uint16(reg) << (i * 4)
+		insn |= uint16(reg) << ((len(args) - i - 1) * 4)
+		fmt.Printf("%016b\n", insn)
 	}
 	return insn, nil
 }
