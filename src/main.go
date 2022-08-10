@@ -49,7 +49,7 @@ func compile(scanner *bufio.Scanner) ([]byte, error) {
 func main() {
 	var args []string = os.Args[1:]
 	if len(args) != 2 {
-		panic("Usage: compiler <in file> <out file>")
+		panic("Usage: compiler <source assembly> <destination binary>")
 	}
 	file, err := os.Open(args[0])
 	if err != nil {
