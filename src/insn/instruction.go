@@ -19,6 +19,11 @@ var (
 		"sub":   parseSub,
 		"and":   parseAnd,
 		"orr":   parseOrr,
+		"jpr":   parseJpr,
+		"cmp":   parseCmp,
+		"nop":   parseNop,
+		"jpm":   parseJpm,
+		"jp":    parseJp,
 		".word": parseWord,
 	}
 	registerRegex        *regexp.Regexp = regexp.MustCompile("r\\d+")
@@ -241,6 +246,22 @@ func parseOrr(args []string) (uint16, error) {
 	}
 	insn |= ORR_MASK
 	return insn, nil
+}
+
+func parseJpr(args []string) (uint16, error) {
+	return 0, nil
+}
+func parseCmp(args []string) (uint16, error) {
+	return 0, nil
+}
+func parseNop(args []string) (uint16, error) {
+	return 0, nil
+}
+func parseJpm(args []string) (uint16, error) {
+	return 0, nil
+}
+func parseJp(args []string) (uint16, error) {
+	return 0, nil
 }
 
 func parseWord(args []string) (uint16, error) {
