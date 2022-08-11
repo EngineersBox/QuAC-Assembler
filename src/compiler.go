@@ -8,7 +8,9 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/EngineersBox/QuAC-Compiler/antlr4"
 	"github.com/EngineersBox/QuAC-Compiler/src/insn"
+	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 
 var commentRegex *regexp.Regexp = regexp.MustCompile(";.*")
@@ -46,31 +48,54 @@ func compile(scanner *bufio.Scanner) ([]byte, error) {
 	return compiled, nil
 }
 
+// func main() {
+// 	var args []string = os.Args[1:]
+// 	if len(args) != 2 {
+// 		panic("Usage: compiler <source assembly> <destination binary>")
+// 	}
+// 	file, err := os.Open(args[0])
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	defer file.Close()
+// 	scanner := bufio.NewScanner(file)
+
+// 	compiled, err := compile(scanner)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+
+// 	outFile, err := os.Create(args[1])
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	defer outFile.Close()
+
+// 	_, err = outFile.Write(compiled)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// }
+
+type TreeShapeListener struct {
+	*antlr4.BaseQuACParserListener
+}
+
+func NewTreeShapeListener() *TreeShapeListener {
+	return new(TreeShapeListener)
+}
+
+func (this *TreeShapeListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
+	fmt.Println(ctx.GetText())
+}
+
 func main() {
-	var args []string = os.Args[1:]
-	if len(args) != 2 {
-		panic("Usage: compiler <source assembly> <destination binary>")
-	}
-	file, err := os.Open(args[0])
-	if err != nil {
-		panic(err)
-	}
-	defer file.Close()
-	scanner := bufio.NewScanner(file)
-
-	compiled, err := compile(scanner)
-	if err != nil {
-		panic(err)
-	}
-
-	outFile, err := os.Create(args[1])
-	if err != nil {
-		panic(err)
-	}
-	defer outFile.Close()
-
-	_, err = outFile.Write(compiled)
-	if err != nil {
-		panic(err)
-	}
+	input, _ := antlr.NewFileStream(os.Args[1])
+	lexer := antlr4.NewQuACLexer(input)
+	stream := antlr.NewCommonTokenStream(lexer, 0)
+	p := antlr4.NewQuACParser(stream)
+	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
+	p.BuildParseTrees = true
+	tree := p.Parse()
+	antlr.ParseTreeWalkerDefault.Walk(NewTreeShapeListener(), tree)
 }
