@@ -2,9 +2,7 @@ package insn
 
 import (
 	"fmt"
-	"regexp"
 	"strconv"
-	"strings"
 
 	"github.com/EngineersBox/QuAC-Compiler/antlr4"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
@@ -13,29 +11,6 @@ import (
 type InsnVisitor struct {
 	antlr4.QuACParserVisitor
 }
-
-type ParseHandler func([]string) (uint16, error)
-
-var (
-	insnHandler map[string]ParseHandler = map[string]ParseHandler{
-		"movl":  parseMovl,
-		"seth":  parseSeth,
-		"str":   parseStr,
-		"ldr":   parseLdr,
-		"add":   parseAdd,
-		"sub":   parseSub,
-		"and":   parseAnd,
-		"orr":   parseOrr,
-		"jpr":   parseJpr,
-		"cmp":   parseCmp,
-		"nop":   parseNop,
-		"jpm":   parseJpm,
-		"jp":    parseJp,
-		".word": parseWord,
-	}
-	registerRegex        *regexp.Regexp = regexp.MustCompile("r\\d+")
-	addressRegisterRegex *regexp.Regexp = regexp.MustCompile("\\[r\\d+\\]")
-)
 
 func (v *InsnVisitor) Visit(tree antlr.ParseTree) interface{} {
 	switch val := tree.(type) {
@@ -106,7 +81,9 @@ func (v *InsnVisitor) Visit(tree antlr.ParseTree) interface{} {
 func (v *InsnVisitor) VisitParse(ctx *antlr4.ParseContext) interface{} {
 	var result []uint16 = make([]uint16, 0)
 	for _, statement := range ctx.AllStatement() {
-		result = append(result, v.Visit(statement).([]uint16)...)
+		val := v.Visit(statement)
+		fmt.Println(val)
+		result = append(result, val.([]uint16)...)
 	}
 	return result
 }
@@ -148,91 +125,122 @@ func (v *InsnVisitor) VisitWordStatement(ctx *antlr4.WordStatementContext) inter
 	if err != nil {
 		panic(err)
 	}
-	return uint16(val)
+	return []uint16{uint16(val)}
 }
 
 func (v *InsnVisitor) VisitLabelStatement(ctx *antlr4.LabelStatementContext) interface{} {
-	return make([]byte, 0)
+	return make([]uint16, 0)
 }
 
 func (v *InsnVisitor) VisitIFormat(ctx *antlr4.IFormatContext) interface{} {
-	return make([]byte, 0)
+	var result uint16
+	if ctx.MOVL() != nil {
+		result = MOVL_MASK
+	} else if ctx.SETH() != nil {
+		result = SETH_MASK
+	} else {
+		panic("Invalid I-Format instruction")
+	}
+	if ctx.EQ() != nil {
+		result |= TRUE_CONDITION
+	}
+	var rd uint16 = v.Visit(ctx.Register()).(uint16)
+	result |= rd << 8
+	imm8, err := parseImm8(ctx.IntegerLiteral().GetText())
+	if err != nil {
+		panic(fmt.Errorf("Bad immediate 8-bit format: %s", err))
+	}
+	result |= uint16(imm8)
+	fmt.Printf("I-Format: %016b\n", result)
+	return []uint16{result}
 }
 
 func (v *InsnVisitor) VisitRMemFormat(ctx *antlr4.RMemFormatContext) interface{} {
-	return make([]byte, 0)
+	var result uint16
+	if ctx.STR() != nil {
+		result = STR_MASK
+	} else if ctx.LDR() != nil {
+		result = LDR_MASK
+	} else {
+		panic("Invalid R-Format memory instruction")
+	}
+	if ctx.EQ() != nil {
+		result |= TRUE_CONDITION
+	}
+	var registers []antlr4.IRegisterContext = ctx.AllRegister()
+	if len(registers) != 2 {
+		panic(fmt.Errorf("Expected 2 registers (rd, ra), got %d", len(registers)))
+	}
+	result |= v.Visit(registers[0]).(uint16) << RD_REGISTER_OFFSET
+	result |= v.Visit(registers[1]).(uint16) << RA_REGISTER_OFFSET
+	fmt.Printf("R-Format Mem: %016b\n", result)
+	return []uint16{result}
 }
 
 func (v *InsnVisitor) VisitRALUFormat(ctx *antlr4.RALUFormatContext) interface{} {
-	return make([]byte, 0)
+	var result uint16
+	if ctx.ADD() != nil {
+		result = ADD_MASK
+	} else if ctx.SUB() != nil {
+		result = SUB_MASK
+	} else if ctx.AND() != nil {
+		result = AND_MASK
+	} else if ctx.ORR() != nil {
+		result = ORR_MASK
+	} else {
+		panic("Invalid R-Format ALU instruction")
+	}
+	if ctx.EQ() != nil {
+		result |= TRUE_CONDITION
+	}
+	var registers []antlr4.IRegisterContext = ctx.AllRegister()
+	if len(registers) != 3 {
+		panic(fmt.Errorf("Expected 3 registers (rd, ra, rb), got %d", len(registers)))
+	}
+	result |= v.Visit(registers[0]).(uint16) << RD_REGISTER_OFFSET
+	result |= v.Visit(registers[1]).(uint16) << RA_REGISTER_OFFSET
+	result |= v.Visit(registers[2]).(uint16) << RB_REGISTER_OFFSET
+	fmt.Printf("R-Format ALU: %016b\n", result)
+	return []uint16{result}
 }
 
 func (v *InsnVisitor) VisitNop(ctx *antlr4.NopContext) interface{} {
-	return make([]byte, 0)
+	return make([]uint16, 0)
 }
 
 func (v *InsnVisitor) VisitPseudo2Param(ctx *antlr4.Pseudo2ParamContext) interface{} {
-	return make([]byte, 0)
+	return make([]uint16, 0)
 }
 
 func (v *InsnVisitor) VisitJpr(ctx *antlr4.JprContext) interface{} {
-	return make([]byte, 0)
+	return make([]uint16, 0)
 }
 
 func (v *InsnVisitor) VisitJpm(ctx *antlr4.JpmContext) interface{} {
-	return make([]byte, 0)
+	return make([]uint16, 0)
 }
 
 func (v *InsnVisitor) VisitJp(ctx *antlr4.JpContext) interface{} {
-	return make([]byte, 0)
+	return make([]uint16, 0)
 }
 
 func (v *InsnVisitor) VisitRegister(ctx *antlr4.RegisterContext) interface{} {
-	return make([]byte, 0)
-}
-
-func ParseInsn(insn string) (uint16, error) {
-	if len(insn) < 7 {
-		return 0, fmt.Errorf("Invalid insn: %s", insn)
+	if ctx.RZ() != nil || ctx.R0() != nil {
+		return uint16(0b000)
+	} else if ctx.R1() != nil {
+		return uint16(0b001)
+	} else if ctx.R2() != nil {
+		return uint16(0b010)
+	} else if ctx.R3() != nil {
+		return uint16(0b011)
+	} else if ctx.R4() != nil {
+		return uint16(0b100)
+	} else if ctx.FL() != nil || ctx.R5() != nil {
+		return uint16(0b101)
+	} else if ctx.PC() != nil || ctx.R7() != nil {
+		return uint16(0b111)
 	}
-	var splitInsn []string = strings.Split(insn, " ")
-	if parseFn, ok := insnHandler[splitInsn[0]]; ok {
-		return parseFn(splitInsn[1:])
-	}
-	return 0, fmt.Errorf("Invalid insn: %s", insn)
-}
-
-func validateIFormatArgs(args []string) error {
-	if len(args) != 2 {
-		return fmt.Errorf(
-			"Expected 2 arguments, got %d: \"%s\"",
-			len(args),
-			strings.Join(args, " "),
-		)
-	}
-	return nil
-}
-
-func parseRegister(reg string) (uint8, error) {
-	var match []byte = registerRegex.Find([]byte(reg))
-	if match == nil {
-		return 0, fmt.Errorf("Invalid register format")
-	}
-	var matchString string = strings.Trim(string(match), "r")
-	intValue, err := strconv.Atoi(matchString)
-	if err != nil {
-		return 0, err
-	} else if intValue > 7 {
-		return 0, fmt.Errorf("Register does not exist: %d", intValue)
-	}
-	return uint8(intValue), nil
-}
-
-func validateDestRegister(rd uint8) error {
-	if rd == 0 || rd > 7 {
-		return fmt.Errorf("Destination register out of range: %d", rd)
-	}
-	return nil
+	panic("Invalid register")
 }
 
 func parseImm8(arg string) (uint8, error) {
@@ -241,197 +249,4 @@ func parseImm8(arg string) (uint8, error) {
 		return 0, err
 	}
 	return uint8(imm8), nil
-}
-
-func parseIFormat(args []string) (uint16, error) {
-	if err := validateIFormatArgs(args); err != nil {
-		return 0, err
-	}
-	rd, err := parseRegister(args[0])
-	if err != nil {
-		return 0, err
-	} else if err = validateDestRegister(rd); err != nil {
-		return 0, err
-	}
-	imm8, err := parseImm8(args[1])
-	if err != nil {
-		return 0, err
-	}
-	var insn uint16 = 0
-	insn |= uint16(imm8)
-	insn |= (uint16(rd) << 8)
-	return insn, nil
-}
-
-func parseMovl(args []string) (uint16, error) {
-	return parseIFormat(args)
-}
-
-func parseSeth(args []string) (uint16, error) {
-	insn, err := parseIFormat(args)
-	if err != nil {
-		return 0, err
-	}
-	insn |= SETH_MASK
-	return insn, nil
-}
-
-func validateRFormatMemArgs(args []string) error {
-	if len(args) != 2 {
-		return fmt.Errorf(
-			"Expected 2 arguments, got %d: \"%s\"",
-			len(args),
-			strings.Join(args, " "),
-		)
-	}
-	return nil
-}
-
-func parseAddressRegister(reg string) (uint8, error) {
-	var match []byte = addressRegisterRegex.Find([]byte(reg))
-	if match == nil {
-		return 0, fmt.Errorf("Invalid register format")
-	}
-	var matchString string = strings.Trim(
-		strings.Trim(string(match), "[]"),
-		"r",
-	)
-	intValue, err := strconv.Atoi(matchString)
-	if err != nil {
-		return 0, err
-	} else if intValue > 7 {
-		return 0, fmt.Errorf("Register does not exist: %d", intValue)
-	}
-	return uint8(intValue), nil
-}
-
-func parseRFormatMem(args []string) (uint16, error) {
-	if err := validateRFormatMemArgs(args); err != nil {
-		return 0, err
-	}
-	rd, err := parseRegister(args[0])
-	if err != nil {
-		return 0, err
-	} else if err = validateDestRegister(rd); err != nil {
-		return 0, err
-	}
-	ra, err := parseAddressRegister(args[1])
-	if err != nil {
-		return 0, nil
-	}
-	var insn uint16 = 0
-	insn |= (uint16(ra) << 4)
-	insn |= (uint16(rd) << 8)
-	return insn, nil
-}
-
-func parseStr(args []string) (uint16, error) {
-	insn, err := parseRFormatMem(args)
-	if err != nil {
-		return 0, nil
-	}
-	insn |= STR_MASK
-	return insn, nil
-}
-
-func parseLdr(args []string) (uint16, error) {
-	insn, err := parseRFormatMem(args)
-	if err != nil {
-		return 0, nil
-	}
-	insn |= LDR_MASK
-	return insn, nil
-}
-
-func validateRFormatALUArgs(args []string) error {
-	if len(args) != 3 {
-		return fmt.Errorf(
-			"Expected 3 arguments, got %d: \"%s\"",
-			len(args),
-			strings.Join(args, " "),
-		)
-	}
-	return nil
-}
-
-func parseRFormatALU(args []string) (uint16, error) {
-	if err := validateRFormatALUArgs(args); err != nil {
-		return 0, nil
-	}
-	var insn uint16 = 0
-	var registers []uint8 = make([]uint8, 3)
-	for i, arg := range args {
-		reg, err := parseRegister(arg)
-		if err != nil {
-			return 0, err
-		} else if err = validateDestRegister(reg); err != nil {
-			return 0, err
-		}
-		registers[i] = reg
-		insn |= uint16(reg) << ((len(args) - i - 1) * 4)
-	}
-	return insn, nil
-}
-
-func parseAdd(args []string) (uint16, error) {
-	insn, err := parseRFormatALU(args)
-	if err != nil {
-		return 0, err
-	}
-	insn |= ADD_MASK
-	return insn, nil
-}
-
-func parseSub(args []string) (uint16, error) {
-	insn, err := parseRFormatALU(args)
-	if err != nil {
-		return 0, err
-	}
-	insn |= SUB_MASK
-	return insn, nil
-}
-
-func parseAnd(args []string) (uint16, error) {
-	insn, err := parseRFormatALU(args)
-	if err != nil {
-		return 0, err
-	}
-	insn |= AND_MASK
-	return insn, nil
-}
-
-func parseOrr(args []string) (uint16, error) {
-	insn, err := parseRFormatALU(args)
-	if err != nil {
-		return 0, err
-	}
-	insn |= ORR_MASK
-	return insn, nil
-}
-
-func parseJpr(args []string) (uint16, error) {
-	return 0, nil
-}
-func parseCmp(args []string) (uint16, error) {
-	return 0, nil
-}
-func parseNop(args []string) (uint16, error) {
-	return 0, nil
-}
-func parseJpm(args []string) (uint16, error) {
-	return 0, nil
-}
-func parseJp(args []string) (uint16, error) {
-	return 0, nil
-}
-
-func parseWord(args []string) (uint16, error) {
-	if len(args) != 1 {
-		return 0, fmt.Errorf("Expected 1 argument, got %d", len(args))
-	}
-	word, err := strconv.ParseInt(args[0], 0, 16)
-	if err != nil {
-		return 0, err
-	}
-	return uint16(word), err
 }
