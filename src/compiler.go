@@ -77,25 +77,36 @@ func compile(scanner *bufio.Scanner) ([]byte, error) {
 // 	}
 // }
 
-type TreeShapeListener struct {
-	*antlr4.BaseQuACParserListener
-}
-
-func NewTreeShapeListener() *TreeShapeListener {
-	return new(TreeShapeListener)
-}
-
-func (this *TreeShapeListener) EnterEveryRule(ctx antlr.ParserRuleContext) {
-	fmt.Println(ctx.GetText())
-}
-
 func main() {
-	input, _ := antlr.NewFileStream(os.Args[1])
+	var args []string = os.Args[1:]
+	if len(args) != 2 {
+		panic("Usage: compiler <source assembly> <destination binary>")
+	}
+
+	input, _ := antlr.NewFileStream(args[0])
 	lexer := antlr4.NewQuACLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, 0)
-	p := antlr4.NewQuACParser(stream)
-	p.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
-	p.BuildParseTrees = true
-	tree := p.Parse()
-	antlr.ParseTreeWalkerDefault.Walk(NewTreeShapeListener(), tree)
+	parser := antlr4.NewQuACParser(stream)
+	parser.AddErrorListener(antlr.NewDiagnosticErrorListener(true))
+	parser.BuildParseTrees = true
+	tree := parser.Parse()
+
+	var visitor insn.InsnVisitor = insn.InsnVisitor{}
+	fmt.Println("Calling visitor")
+	var result []uint16 = visitor.Visit(tree).([]uint16)
+	var bytesResult []byte = make([]byte, len(result)*2)
+	for _, asmCommand := range result {
+		bytesResult = append(bytesResult, byte(asmCommand&0x00FF), byte((asmCommand&0xFF00)>>8))
+	}
+
+	outFile, err := os.Create(args[1])
+	if err != nil {
+		panic(err)
+	}
+	defer outFile.Close()
+
+	_, err = outFile.Write(bytesResult)
+	if err != nil {
+		panic(err)
+	}
 }

@@ -287,6 +287,16 @@ func (s *ParseContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *ParseContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitParse(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *QuACParser) Parse() (localctx IParseContext) {
 	this := p
 	_ = this
@@ -430,6 +440,16 @@ func (s *JpmStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *JpmStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitJpmStatement(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 type RALUFormatStatementContext struct {
 	*StatementContext
 }
@@ -473,6 +493,16 @@ func (s *RALUFormatStatementContext) EnterRule(listener antlr.ParseTreeListener)
 func (s *RALUFormatStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(QuACParserListener); ok {
 		listenerT.ExitRALUFormatStatement(s)
+	}
+}
+
+func (s *RALUFormatStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitRALUFormatStatement(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -522,6 +552,16 @@ func (s *JpStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *JpStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitJpStatement(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 type Pseudo2ParamStatementContext struct {
 	*StatementContext
 }
@@ -565,6 +605,16 @@ func (s *Pseudo2ParamStatementContext) EnterRule(listener antlr.ParseTreeListene
 func (s *Pseudo2ParamStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(QuACParserListener); ok {
 		listenerT.ExitPseudo2ParamStatement(s)
+	}
+}
+
+func (s *Pseudo2ParamStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitPseudo2ParamStatement(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -614,6 +664,16 @@ func (s *NopStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *NopStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitNopStatement(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 type JprStatementContext struct {
 	*StatementContext
 }
@@ -660,6 +720,16 @@ func (s *JprStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *JprStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitJprStatement(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 type WordStatementContext struct {
 	*StatementContext
 }
@@ -695,6 +765,16 @@ func (s *WordStatementContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *WordStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(QuACParserListener); ok {
 		listenerT.ExitWordStatement(s)
+	}
+}
+
+func (s *WordStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitWordStatement(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -744,6 +824,16 @@ func (s *RMemFormatStatementContext) ExitRule(listener antlr.ParseTreeListener) 
 	}
 }
 
+func (s *RMemFormatStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitRMemFormatStatement(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 type LabelStatementContext struct {
 	*StatementContext
 }
@@ -779,6 +869,16 @@ func (s *LabelStatementContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *LabelStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(QuACParserListener); ok {
 		listenerT.ExitLabelStatement(s)
+	}
+}
+
+func (s *LabelStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitLabelStatement(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -825,6 +925,16 @@ func (s *IFormatStatementContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *IFormatStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(QuACParserListener); ok {
 		listenerT.ExitIFormatStatement(s)
+	}
+}
+
+func (s *IFormatStatementContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitIFormatStatement(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -1044,6 +1154,16 @@ func (s *IFormatContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *IFormatContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitIFormat(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *QuACParser) IFormat() (localctx IIFormatContext) {
 	this := p
 	_ = this
@@ -1227,6 +1347,16 @@ func (s *RMemFormatContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *RMemFormatContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(QuACParserListener); ok {
 		listenerT.ExitRMemFormat(s)
+	}
+}
+
+func (s *RMemFormatContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitRMemFormat(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -1428,6 +1558,16 @@ func (s *RALUFormatContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *RALUFormatContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitRALUFormat(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *QuACParser) RALUFormat() (localctx IRALUFormatContext) {
 	this := p
 	_ = this
@@ -1558,6 +1698,16 @@ func (s *NopContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *NopContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(QuACParserListener); ok {
 		listenerT.ExitNop(s)
+	}
+}
+
+func (s *NopContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitNop(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -1708,6 +1858,16 @@ func (s *Pseudo2ParamContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *Pseudo2ParamContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitPseudo2Param(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *QuACParser) Pseudo2Param() (localctx IPseudo2ParamContext) {
 	this := p
 	_ = this
@@ -1853,6 +2013,16 @@ func (s *JprContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *JprContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitJpr(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *QuACParser) Jpr() (localctx IJprContext) {
 	this := p
 	_ = this
@@ -1991,6 +2161,16 @@ func (s *JpmContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+func (s *JpmContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitJpm(s)
+
+	default:
+		return t.VisitChildren(s)
+	}
+}
+
 func (p *QuACParser) Jpm() (localctx IJpmContext) {
 	this := p
 	_ = this
@@ -2118,6 +2298,16 @@ func (s *JpContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *JpContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(QuACParserListener); ok {
 		listenerT.ExitJp(s)
+	}
+}
+
+func (s *JpContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitJp(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
@@ -2271,6 +2461,16 @@ func (s *RegisterContext) EnterRule(listener antlr.ParseTreeListener) {
 func (s *RegisterContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(QuACParserListener); ok {
 		listenerT.ExitRegister(s)
+	}
+}
+
+func (s *RegisterContext) Accept(visitor antlr.ParseTreeVisitor) interface{} {
+	switch t := visitor.(type) {
+	case QuACParserVisitor:
+		return t.VisitRegister(s)
+
+	default:
+		return t.VisitChildren(s)
 	}
 }
 
