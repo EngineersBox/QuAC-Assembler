@@ -31,7 +31,7 @@ ldr r3, [r1]
 test:
 add r3, r3, r2
 str r3, [r1]
-jp test
+jp eq test
 .word 0
 .word 0
 .word 0
