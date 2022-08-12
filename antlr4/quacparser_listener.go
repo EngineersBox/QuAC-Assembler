@@ -34,6 +34,9 @@ type QuACParserListener interface {
 	// EnterJpStatement is called when entering the jpStatement production.
 	EnterJpStatement(c *JpStatementContext)
 
+	// EnterWordStatement is called when entering the wordStatement production.
+	EnterWordStatement(c *WordStatementContext)
+
 	// EnterLabelStatement is called when entering the labelStatement production.
 	EnterLabelStatement(c *LabelStatementContext)
 
@@ -90,6 +93,9 @@ type QuACParserListener interface {
 
 	// ExitJpStatement is called when exiting the jpStatement production.
 	ExitJpStatement(c *JpStatementContext)
+
+	// ExitWordStatement is called when exiting the wordStatement production.
+	ExitWordStatement(c *WordStatementContext)
 
 	// ExitLabelStatement is called when exiting the labelStatement production.
 	ExitLabelStatement(c *LabelStatementContext)

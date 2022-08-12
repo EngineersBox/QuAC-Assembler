@@ -32,16 +32,16 @@ var quacparserParserStaticData struct {
 func quacparserParserInit() {
 	staticData := &quacparserParserStaticData
 	staticData.literalNames = []string{
-		"", "", "'['", "']'", "';'", "':'", "'.'", "','", "'rz'", "'r0'", "'r1'",
-		"'r2'", "'r3'", "'r4'", "'fl'", "'r5'", "'pc'", "'r7'", "'eq'", "'mov'",
-		"'movl'", "'seth'", "'str'", "'ldr'", "'add'", "'sub'", "'and'", "'orr'",
-		"'jpr'", "'cmp'", "'nop'", "'jpm'", "'jp'",
+		"", "", "'['", "']'", "';'", "':'", "','", "'\\n'", "'rz'", "'r0'",
+		"'r1'", "'r2'", "'r3'", "'r4'", "'fl'", "'r5'", "'pc'", "'r7'", "'eq'",
+		"'mov'", "'movl'", "'seth'", "'str'", "'ldr'", "'add'", "'sub'", "'and'",
+		"'orr'", "'jpr'", "'cmp'", "'nop'", "'jpm'", "'jp'", "'.word'",
 	}
 	staticData.symbolicNames = []string{
-		"", "IntegerLiteral", "LBRACK", "RBRACK", "SEMI", "COLON", "DOT", "COMMA",
-		"RZ", "R0", "R1", "R2", "R3", "R4", "FL", "R5", "PC", "R7", "EQ", "MOV",
-		"MOVL", "SETH", "STR", "LDR", "ADD", "SUB", "AND", "ORR", "JPR", "CMP",
-		"NOP", "JPM", "JP", "Identifier", "WS", "LINE_COMMENT",
+		"", "IntegerLiteral", "LBRACK", "RBRACK", "SEMI", "COLON", "COMMA",
+		"NEWLINE", "RZ", "R0", "R1", "R2", "R3", "R4", "FL", "R5", "PC", "R7",
+		"EQ", "MOV", "MOVL", "SETH", "STR", "LDR", "ADD", "SUB", "AND", "ORR",
+		"JPR", "CMP", "NOP", "JPM", "JP", "WORD", "Identifier", "WS", "LINE_COMMENT",
 	}
 	staticData.ruleNames = []string{
 		"parse", "statement", "iFormat", "rMemFormat", "rALUFormat", "nop",
@@ -49,49 +49,50 @@ func quacparserParserInit() {
 	}
 	staticData.predictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 35, 103, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 36, 105, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 2, 10, 7,
 		10, 1, 0, 5, 0, 24, 8, 0, 10, 0, 12, 0, 27, 9, 0, 1, 0, 1, 0, 1, 1, 1,
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 41, 8, 1, 1, 2,
-		1, 2, 3, 2, 45, 8, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 3, 1, 3, 3, 3, 53, 8,
-		3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 4, 1, 4, 3, 4, 63, 8, 4, 1, 4,
-		1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 5, 1, 5, 1, 6, 1, 6, 3, 6, 75, 8, 6, 1,
-		6, 1, 6, 1, 6, 1, 6, 1, 7, 1, 7, 3, 7, 83, 8, 7, 1, 7, 1, 7, 1, 8, 1, 8,
-		3, 8, 89, 8, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 9, 1, 9, 3, 9, 97, 8, 9, 1,
-		9, 1, 9, 1, 10, 1, 10, 1, 10, 0, 0, 11, 0, 2, 4, 6, 8, 10, 12, 14, 16,
-		18, 20, 0, 6, 1, 0, 20, 21, 1, 0, 22, 23, 1, 0, 24, 27, 2, 0, 19, 19, 29,
-		29, 2, 0, 1, 1, 33, 33, 1, 0, 8, 17, 107, 0, 25, 1, 0, 0, 0, 2, 40, 1,
-		0, 0, 0, 4, 42, 1, 0, 0, 0, 6, 50, 1, 0, 0, 0, 8, 60, 1, 0, 0, 0, 10, 70,
-		1, 0, 0, 0, 12, 72, 1, 0, 0, 0, 14, 80, 1, 0, 0, 0, 16, 86, 1, 0, 0, 0,
-		18, 94, 1, 0, 0, 0, 20, 100, 1, 0, 0, 0, 22, 24, 3, 2, 1, 0, 23, 22, 1,
-		0, 0, 0, 24, 27, 1, 0, 0, 0, 25, 23, 1, 0, 0, 0, 25, 26, 1, 0, 0, 0, 26,
-		28, 1, 0, 0, 0, 27, 25, 1, 0, 0, 0, 28, 29, 5, 0, 0, 1, 29, 1, 1, 0, 0,
-		0, 30, 41, 3, 4, 2, 0, 31, 41, 3, 6, 3, 0, 32, 41, 3, 8, 4, 0, 33, 41,
-		3, 10, 5, 0, 34, 41, 3, 12, 6, 0, 35, 41, 3, 14, 7, 0, 36, 41, 3, 16, 8,
-		0, 37, 41, 3, 18, 9, 0, 38, 39, 5, 33, 0, 0, 39, 41, 5, 5, 0, 0, 40, 30,
-		1, 0, 0, 0, 40, 31, 1, 0, 0, 0, 40, 32, 1, 0, 0, 0, 40, 33, 1, 0, 0, 0,
-		40, 34, 1, 0, 0, 0, 40, 35, 1, 0, 0, 0, 40, 36, 1, 0, 0, 0, 40, 37, 1,
-		0, 0, 0, 40, 38, 1, 0, 0, 0, 41, 3, 1, 0, 0, 0, 42, 44, 7, 0, 0, 0, 43,
-		45, 5, 18, 0, 0, 44, 43, 1, 0, 0, 0, 44, 45, 1, 0, 0, 0, 45, 46, 1, 0,
-		0, 0, 46, 47, 3, 20, 10, 0, 47, 48, 5, 7, 0, 0, 48, 49, 5, 1, 0, 0, 49,
-		5, 1, 0, 0, 0, 50, 52, 7, 1, 0, 0, 51, 53, 5, 18, 0, 0, 52, 51, 1, 0, 0,
-		0, 52, 53, 1, 0, 0, 0, 53, 54, 1, 0, 0, 0, 54, 55, 3, 20, 10, 0, 55, 56,
-		5, 7, 0, 0, 56, 57, 5, 2, 0, 0, 57, 58, 3, 20, 10, 0, 58, 59, 5, 3, 0,
-		0, 59, 7, 1, 0, 0, 0, 60, 62, 7, 2, 0, 0, 61, 63, 5, 18, 0, 0, 62, 61,
-		1, 0, 0, 0, 62, 63, 1, 0, 0, 0, 63, 64, 1, 0, 0, 0, 64, 65, 3, 20, 10,
-		0, 65, 66, 5, 7, 0, 0, 66, 67, 3, 20, 10, 0, 67, 68, 5, 7, 0, 0, 68, 69,
-		3, 20, 10, 0, 69, 9, 1, 0, 0, 0, 70, 71, 5, 30, 0, 0, 71, 11, 1, 0, 0,
-		0, 72, 74, 7, 3, 0, 0, 73, 75, 5, 18, 0, 0, 74, 73, 1, 0, 0, 0, 74, 75,
-		1, 0, 0, 0, 75, 76, 1, 0, 0, 0, 76, 77, 3, 20, 10, 0, 77, 78, 5, 7, 0,
-		0, 78, 79, 3, 20, 10, 0, 79, 13, 1, 0, 0, 0, 80, 82, 5, 28, 0, 0, 81, 83,
-		5, 18, 0, 0, 82, 81, 1, 0, 0, 0, 82, 83, 1, 0, 0, 0, 83, 84, 1, 0, 0, 0,
-		84, 85, 3, 20, 10, 0, 85, 15, 1, 0, 0, 0, 86, 88, 5, 31, 0, 0, 87, 89,
-		5, 18, 0, 0, 88, 87, 1, 0, 0, 0, 88, 89, 1, 0, 0, 0, 89, 90, 1, 0, 0, 0,
-		90, 91, 5, 2, 0, 0, 91, 92, 3, 20, 10, 0, 92, 93, 5, 3, 0, 0, 93, 17, 1,
-		0, 0, 0, 94, 96, 5, 32, 0, 0, 95, 97, 5, 18, 0, 0, 96, 95, 1, 0, 0, 0,
-		96, 97, 1, 0, 0, 0, 97, 98, 1, 0, 0, 0, 98, 99, 7, 4, 0, 0, 99, 19, 1,
-		0, 0, 0, 100, 101, 7, 5, 0, 0, 101, 21, 1, 0, 0, 0, 9, 25, 40, 44, 52,
-		62, 74, 82, 88, 96,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 43,
+		8, 1, 1, 2, 1, 2, 3, 2, 47, 8, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 3, 1, 3, 3,
+		3, 55, 8, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 4, 1, 4, 3, 4, 65,
+		8, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 4, 1, 5, 1, 5, 1, 6, 1, 6, 3, 6,
+		77, 8, 6, 1, 6, 1, 6, 1, 6, 1, 6, 1, 7, 1, 7, 3, 7, 85, 8, 7, 1, 7, 1,
+		7, 1, 8, 1, 8, 3, 8, 91, 8, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 9, 1, 9, 3, 9,
+		99, 8, 9, 1, 9, 1, 9, 1, 10, 1, 10, 1, 10, 0, 0, 11, 0, 2, 4, 6, 8, 10,
+		12, 14, 16, 18, 20, 0, 6, 1, 0, 20, 21, 1, 0, 22, 23, 1, 0, 24, 27, 2,
+		0, 19, 19, 29, 29, 2, 0, 1, 1, 34, 34, 1, 0, 8, 17, 110, 0, 25, 1, 0, 0,
+		0, 2, 42, 1, 0, 0, 0, 4, 44, 1, 0, 0, 0, 6, 52, 1, 0, 0, 0, 8, 62, 1, 0,
+		0, 0, 10, 72, 1, 0, 0, 0, 12, 74, 1, 0, 0, 0, 14, 82, 1, 0, 0, 0, 16, 88,
+		1, 0, 0, 0, 18, 96, 1, 0, 0, 0, 20, 102, 1, 0, 0, 0, 22, 24, 3, 2, 1, 0,
+		23, 22, 1, 0, 0, 0, 24, 27, 1, 0, 0, 0, 25, 23, 1, 0, 0, 0, 25, 26, 1,
+		0, 0, 0, 26, 28, 1, 0, 0, 0, 27, 25, 1, 0, 0, 0, 28, 29, 5, 0, 0, 1, 29,
+		1, 1, 0, 0, 0, 30, 43, 3, 4, 2, 0, 31, 43, 3, 6, 3, 0, 32, 43, 3, 8, 4,
+		0, 33, 43, 3, 10, 5, 0, 34, 43, 3, 12, 6, 0, 35, 43, 3, 14, 7, 0, 36, 43,
+		3, 16, 8, 0, 37, 43, 3, 18, 9, 0, 38, 39, 5, 33, 0, 0, 39, 43, 5, 1, 0,
+		0, 40, 41, 5, 34, 0, 0, 41, 43, 5, 5, 0, 0, 42, 30, 1, 0, 0, 0, 42, 31,
+		1, 0, 0, 0, 42, 32, 1, 0, 0, 0, 42, 33, 1, 0, 0, 0, 42, 34, 1, 0, 0, 0,
+		42, 35, 1, 0, 0, 0, 42, 36, 1, 0, 0, 0, 42, 37, 1, 0, 0, 0, 42, 38, 1,
+		0, 0, 0, 42, 40, 1, 0, 0, 0, 43, 3, 1, 0, 0, 0, 44, 46, 7, 0, 0, 0, 45,
+		47, 5, 18, 0, 0, 46, 45, 1, 0, 0, 0, 46, 47, 1, 0, 0, 0, 47, 48, 1, 0,
+		0, 0, 48, 49, 3, 20, 10, 0, 49, 50, 5, 6, 0, 0, 50, 51, 5, 1, 0, 0, 51,
+		5, 1, 0, 0, 0, 52, 54, 7, 1, 0, 0, 53, 55, 5, 18, 0, 0, 54, 53, 1, 0, 0,
+		0, 54, 55, 1, 0, 0, 0, 55, 56, 1, 0, 0, 0, 56, 57, 3, 20, 10, 0, 57, 58,
+		5, 6, 0, 0, 58, 59, 5, 2, 0, 0, 59, 60, 3, 20, 10, 0, 60, 61, 5, 3, 0,
+		0, 61, 7, 1, 0, 0, 0, 62, 64, 7, 2, 0, 0, 63, 65, 5, 18, 0, 0, 64, 63,
+		1, 0, 0, 0, 64, 65, 1, 0, 0, 0, 65, 66, 1, 0, 0, 0, 66, 67, 3, 20, 10,
+		0, 67, 68, 5, 6, 0, 0, 68, 69, 3, 20, 10, 0, 69, 70, 5, 6, 0, 0, 70, 71,
+		3, 20, 10, 0, 71, 9, 1, 0, 0, 0, 72, 73, 5, 30, 0, 0, 73, 11, 1, 0, 0,
+		0, 74, 76, 7, 3, 0, 0, 75, 77, 5, 18, 0, 0, 76, 75, 1, 0, 0, 0, 76, 77,
+		1, 0, 0, 0, 77, 78, 1, 0, 0, 0, 78, 79, 3, 20, 10, 0, 79, 80, 5, 6, 0,
+		0, 80, 81, 3, 20, 10, 0, 81, 13, 1, 0, 0, 0, 82, 84, 5, 28, 0, 0, 83, 85,
+		5, 18, 0, 0, 84, 83, 1, 0, 0, 0, 84, 85, 1, 0, 0, 0, 85, 86, 1, 0, 0, 0,
+		86, 87, 3, 20, 10, 0, 87, 15, 1, 0, 0, 0, 88, 90, 5, 31, 0, 0, 89, 91,
+		5, 18, 0, 0, 90, 89, 1, 0, 0, 0, 90, 91, 1, 0, 0, 0, 91, 92, 1, 0, 0, 0,
+		92, 93, 5, 2, 0, 0, 93, 94, 3, 20, 10, 0, 94, 95, 5, 3, 0, 0, 95, 17, 1,
+		0, 0, 0, 96, 98, 5, 32, 0, 0, 97, 99, 5, 18, 0, 0, 98, 97, 1, 0, 0, 0,
+		98, 99, 1, 0, 0, 0, 99, 100, 1, 0, 0, 0, 100, 101, 7, 4, 0, 0, 101, 19,
+		1, 0, 0, 0, 102, 103, 7, 5, 0, 0, 103, 21, 1, 0, 0, 0, 9, 25, 42, 46, 54,
+		64, 76, 84, 90, 98,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -135,8 +136,8 @@ const (
 	QuACParserRBRACK         = 3
 	QuACParserSEMI           = 4
 	QuACParserCOLON          = 5
-	QuACParserDOT            = 6
-	QuACParserCOMMA          = 7
+	QuACParserCOMMA          = 6
+	QuACParserNEWLINE        = 7
 	QuACParserRZ             = 8
 	QuACParserR0             = 9
 	QuACParserR1             = 10
@@ -162,9 +163,10 @@ const (
 	QuACParserNOP            = 30
 	QuACParserJPM            = 31
 	QuACParserJP             = 32
-	QuACParserIdentifier     = 33
-	QuACParserWS             = 34
-	QuACParserLINE_COMMENT   = 35
+	QuACParserWORD           = 33
+	QuACParserIdentifier     = 34
+	QuACParserWS             = 35
+	QuACParserLINE_COMMENT   = 36
 )
 
 // QuACParser rules.
@@ -314,7 +316,7 @@ func (p *QuACParser) Parse() (localctx IParseContext) {
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for ((_la-19)&-(0x1f+1)) == 0 && ((1<<uint((_la-19)))&((1<<(QuACParserMOV-19))|(1<<(QuACParserMOVL-19))|(1<<(QuACParserSETH-19))|(1<<(QuACParserSTR-19))|(1<<(QuACParserLDR-19))|(1<<(QuACParserADD-19))|(1<<(QuACParserSUB-19))|(1<<(QuACParserAND-19))|(1<<(QuACParserORR-19))|(1<<(QuACParserJPR-19))|(1<<(QuACParserCMP-19))|(1<<(QuACParserNOP-19))|(1<<(QuACParserJPM-19))|(1<<(QuACParserJP-19))|(1<<(QuACParserIdentifier-19)))) != 0 {
+	for ((_la-19)&-(0x1f+1)) == 0 && ((1<<uint((_la-19)))&((1<<(QuACParserMOV-19))|(1<<(QuACParserMOVL-19))|(1<<(QuACParserSETH-19))|(1<<(QuACParserSTR-19))|(1<<(QuACParserLDR-19))|(1<<(QuACParserADD-19))|(1<<(QuACParserSUB-19))|(1<<(QuACParserAND-19))|(1<<(QuACParserORR-19))|(1<<(QuACParserJPR-19))|(1<<(QuACParserCMP-19))|(1<<(QuACParserNOP-19))|(1<<(QuACParserJPM-19))|(1<<(QuACParserJP-19))|(1<<(QuACParserWORD-19))|(1<<(QuACParserIdentifier-19)))) != 0 {
 		{
 			p.SetState(22)
 			p.Statement()
@@ -658,6 +660,44 @@ func (s *JprStatementContext) ExitRule(listener antlr.ParseTreeListener) {
 	}
 }
 
+type WordStatementContext struct {
+	*StatementContext
+}
+
+func NewWordStatementContext(parser antlr.Parser, ctx antlr.ParserRuleContext) *WordStatementContext {
+	var p = new(WordStatementContext)
+
+	p.StatementContext = NewEmptyStatementContext()
+	p.parser = parser
+	p.CopyFrom(ctx.(*StatementContext))
+
+	return p
+}
+
+func (s *WordStatementContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *WordStatementContext) WORD() antlr.TerminalNode {
+	return s.GetToken(QuACParserWORD, 0)
+}
+
+func (s *WordStatementContext) IntegerLiteral() antlr.TerminalNode {
+	return s.GetToken(QuACParserIntegerLiteral, 0)
+}
+
+func (s *WordStatementContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(QuACParserListener); ok {
+		listenerT.EnterWordStatement(s)
+	}
+}
+
+func (s *WordStatementContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(QuACParserListener); ok {
+		listenerT.ExitWordStatement(s)
+	}
+}
+
 type RMemFormatStatementContext struct {
 	*StatementContext
 }
@@ -811,7 +851,7 @@ func (p *QuACParser) Statement() (localctx IStatementContext) {
 		}
 	}()
 
-	p.SetState(40)
+	p.SetState(42)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
@@ -879,15 +919,27 @@ func (p *QuACParser) Statement() (localctx IStatementContext) {
 			p.Jp()
 		}
 
-	case QuACParserIdentifier:
-		localctx = NewLabelStatementContext(p, localctx)
+	case QuACParserWORD:
+		localctx = NewWordStatementContext(p, localctx)
 		p.EnterOuterAlt(localctx, 9)
 		{
 			p.SetState(38)
-			p.Match(QuACParserIdentifier)
+			p.Match(QuACParserWORD)
 		}
 		{
 			p.SetState(39)
+			p.Match(QuACParserIntegerLiteral)
+		}
+
+	case QuACParserIdentifier:
+		localctx = NewLabelStatementContext(p, localctx)
+		p.EnterOuterAlt(localctx, 10)
+		{
+			p.SetState(40)
+			p.Match(QuACParserIdentifier)
+		}
+		{
+			p.SetState(41)
 			p.Match(QuACParserCOLON)
 		}
 
@@ -1018,7 +1070,7 @@ func (p *QuACParser) IFormat() (localctx IIFormatContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(42)
+		p.SetState(44)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(_la == QuACParserMOVL || _la == QuACParserSETH) {
@@ -1028,27 +1080,27 @@ func (p *QuACParser) IFormat() (localctx IIFormatContext) {
 			p.Consume()
 		}
 	}
-	p.SetState(44)
+	p.SetState(46)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == QuACParserEQ {
 		{
-			p.SetState(43)
+			p.SetState(45)
 			p.Match(QuACParserEQ)
 		}
 
 	}
 	{
-		p.SetState(46)
+		p.SetState(48)
 		p.Register()
 	}
 	{
-		p.SetState(47)
+		p.SetState(49)
 		p.Match(QuACParserCOMMA)
 	}
 	{
-		p.SetState(48)
+		p.SetState(50)
 		p.Match(QuACParserIntegerLiteral)
 	}
 
@@ -1204,7 +1256,7 @@ func (p *QuACParser) RMemFormat() (localctx IRMemFormatContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(50)
+		p.SetState(52)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(_la == QuACParserSTR || _la == QuACParserLDR) {
@@ -1214,35 +1266,35 @@ func (p *QuACParser) RMemFormat() (localctx IRMemFormatContext) {
 			p.Consume()
 		}
 	}
-	p.SetState(52)
+	p.SetState(54)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == QuACParserEQ {
 		{
-			p.SetState(51)
+			p.SetState(53)
 			p.Match(QuACParserEQ)
 		}
 
 	}
 	{
-		p.SetState(54)
-		p.Register()
-	}
-	{
-		p.SetState(55)
-		p.Match(QuACParserCOMMA)
-	}
-	{
 		p.SetState(56)
-		p.Match(QuACParserLBRACK)
+		p.Register()
 	}
 	{
 		p.SetState(57)
-		p.Register()
+		p.Match(QuACParserCOMMA)
 	}
 	{
 		p.SetState(58)
+		p.Match(QuACParserLBRACK)
+	}
+	{
+		p.SetState(59)
+		p.Register()
+	}
+	{
+		p.SetState(60)
 		p.Match(QuACParserRBRACK)
 	}
 
@@ -1402,7 +1454,7 @@ func (p *QuACParser) RALUFormat() (localctx IRALUFormatContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(60)
+		p.SetState(62)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<QuACParserADD)|(1<<QuACParserSUB)|(1<<QuACParserAND)|(1<<QuACParserORR))) != 0) {
@@ -1412,24 +1464,16 @@ func (p *QuACParser) RALUFormat() (localctx IRALUFormatContext) {
 			p.Consume()
 		}
 	}
-	p.SetState(62)
+	p.SetState(64)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == QuACParserEQ {
 		{
-			p.SetState(61)
+			p.SetState(63)
 			p.Match(QuACParserEQ)
 		}
 
-	}
-	{
-		p.SetState(64)
-		p.Register()
-	}
-	{
-		p.SetState(65)
-		p.Match(QuACParserCOMMA)
 	}
 	{
 		p.SetState(66)
@@ -1441,6 +1485,14 @@ func (p *QuACParser) RALUFormat() (localctx IRALUFormatContext) {
 	}
 	{
 		p.SetState(68)
+		p.Register()
+	}
+	{
+		p.SetState(69)
+		p.Match(QuACParserCOMMA)
+	}
+	{
+		p.SetState(70)
 		p.Register()
 	}
 
@@ -1534,7 +1586,7 @@ func (p *QuACParser) Nop() (localctx INopContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(70)
+		p.SetState(72)
 		p.Match(QuACParserNOP)
 	}
 
@@ -1682,7 +1734,7 @@ func (p *QuACParser) Pseudo2Param() (localctx IPseudo2ParamContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(72)
+		p.SetState(74)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(_la == QuACParserMOV || _la == QuACParserCMP) {
@@ -1692,27 +1744,27 @@ func (p *QuACParser) Pseudo2Param() (localctx IPseudo2ParamContext) {
 			p.Consume()
 		}
 	}
-	p.SetState(74)
+	p.SetState(76)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == QuACParserEQ {
 		{
-			p.SetState(73)
+			p.SetState(75)
 			p.Match(QuACParserEQ)
 		}
 
 	}
 	{
-		p.SetState(76)
+		p.SetState(78)
 		p.Register()
 	}
 	{
-		p.SetState(77)
+		p.SetState(79)
 		p.Match(QuACParserCOMMA)
 	}
 	{
-		p.SetState(78)
+		p.SetState(80)
 		p.Register()
 	}
 
@@ -1827,22 +1879,22 @@ func (p *QuACParser) Jpr() (localctx IJprContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(80)
+		p.SetState(82)
 		p.Match(QuACParserJPR)
 	}
-	p.SetState(82)
+	p.SetState(84)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == QuACParserEQ {
 		{
-			p.SetState(81)
+			p.SetState(83)
 			p.Match(QuACParserEQ)
 		}
 
 	}
 	{
-		p.SetState(84)
+		p.SetState(86)
 		p.Register()
 	}
 
@@ -1965,30 +2017,30 @@ func (p *QuACParser) Jpm() (localctx IJpmContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(86)
+		p.SetState(88)
 		p.Match(QuACParserJPM)
 	}
-	p.SetState(88)
+	p.SetState(90)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == QuACParserEQ {
 		{
-			p.SetState(87)
+			p.SetState(89)
 			p.Match(QuACParserEQ)
 		}
 
 	}
 	{
-		p.SetState(90)
+		p.SetState(92)
 		p.Match(QuACParserLBRACK)
 	}
 	{
-		p.SetState(91)
+		p.SetState(93)
 		p.Register()
 	}
 	{
-		p.SetState(92)
+		p.SetState(94)
 		p.Match(QuACParserRBRACK)
 	}
 
@@ -2095,22 +2147,22 @@ func (p *QuACParser) Jp() (localctx IJpContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(94)
+		p.SetState(96)
 		p.Match(QuACParserJP)
 	}
-	p.SetState(96)
+	p.SetState(98)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
 	if _la == QuACParserEQ {
 		{
-			p.SetState(95)
+			p.SetState(97)
 			p.Match(QuACParserEQ)
 		}
 
 	}
 	{
-		p.SetState(98)
+		p.SetState(100)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(_la == QuACParserIntegerLiteral || _la == QuACParserIdentifier) {
@@ -2248,7 +2300,7 @@ func (p *QuACParser) Register() (localctx IRegisterContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(100)
+		p.SetState(102)
 		_la = p.GetTokenStream().LA(1)
 
 		if !(((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<QuACParserRZ)|(1<<QuACParserR0)|(1<<QuACParserR1)|(1<<QuACParserR2)|(1<<QuACParserR3)|(1<<QuACParserR4)|(1<<QuACParserFL)|(1<<QuACParserR5)|(1<<QuACParserPC)|(1<<QuACParserR7))) != 0) {

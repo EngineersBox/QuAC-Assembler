@@ -74,6 +74,12 @@ func (s *BaseQuACParserListener) EnterJpStatement(ctx *JpStatementContext) {}
 // ExitJpStatement is called when production jpStatement is exited.
 func (s *BaseQuACParserListener) ExitJpStatement(ctx *JpStatementContext) {}
 
+// EnterWordStatement is called when production wordStatement is entered.
+func (s *BaseQuACParserListener) EnterWordStatement(ctx *WordStatementContext) {}
+
+// ExitWordStatement is called when production wordStatement is exited.
+func (s *BaseQuACParserListener) ExitWordStatement(ctx *WordStatementContext) {}
+
 // EnterLabelStatement is called when production labelStatement is entered.
 func (s *BaseQuACParserListener) EnterLabelStatement(ctx *LabelStatementContext) {}
 

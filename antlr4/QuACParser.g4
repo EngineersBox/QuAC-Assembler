@@ -4,7 +4,7 @@ options {
     tokenVocab = QuACLexer;
 }
 
-parse: statement* EOF;
+parse: (statement)* EOF;
 statement: iFormat # iFormatStatement
     | rMemFormat # rMemFormatStatement
     | rALUFormat # rALUFormatStatement

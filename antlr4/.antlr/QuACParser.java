@@ -16,11 +16,11 @@ public class QuACParser extends Parser {
 	protected static final PredictionContextCache _sharedContextCache =
 		new PredictionContextCache();
 	public static final int
-		IntegerLiteral=1, LBRACK=2, RBRACK=3, SEMI=4, COLON=5, DOT=6, COMMA=7, 
+		IntegerLiteral=1, LBRACK=2, RBRACK=3, SEMI=4, COLON=5, COMMA=6, NEWLINE=7, 
 		RZ=8, R0=9, R1=10, R2=11, R3=12, R4=13, FL=14, R5=15, PC=16, R7=17, EQ=18, 
 		MOV=19, MOVL=20, SETH=21, STR=22, LDR=23, ADD=24, SUB=25, AND=26, ORR=27, 
-		JPR=28, CMP=29, NOP=30, JPM=31, JP=32, Identifier=33, WS=34, LINE_COMMENT=35, 
-		WORD=36;
+		JPR=28, CMP=29, NOP=30, JPM=31, JP=32, WORD=33, Identifier=34, WS=35, 
+		LINE_COMMENT=36;
 	public static final int
 		RULE_parse = 0, RULE_statement = 1, RULE_iFormat = 2, RULE_rMemFormat = 3, 
 		RULE_rALUFormat = 4, RULE_nop = 5, RULE_pseudo2Param = 6, RULE_jpr = 7, 
@@ -35,19 +35,19 @@ public class QuACParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, null, "'['", "']'", "';'", "':'", "'.'", "','", "'rz'", "'r0'", 
+			null, null, "'['", "']'", "';'", "':'", "','", "'\n'", "'rz'", "'r0'", 
 			"'r1'", "'r2'", "'r3'", "'r4'", "'fl'", "'r5'", "'pc'", "'r7'", "'eq'", 
 			"'mov'", "'movl'", "'seth'", "'str'", "'ldr'", "'add'", "'sub'", "'and'", 
-			"'orr'", "'jpr'", "'cmp'", "'nop'", "'jpm'", "'jp'"
+			"'orr'", "'jpr'", "'cmp'", "'nop'", "'jpm'", "'jp'", "'.word'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
 	private static String[] makeSymbolicNames() {
 		return new String[] {
-			null, "IntegerLiteral", "LBRACK", "RBRACK", "SEMI", "COLON", "DOT", "COMMA", 
-			"RZ", "R0", "R1", "R2", "R3", "R4", "FL", "R5", "PC", "R7", "EQ", "MOV", 
-			"MOVL", "SETH", "STR", "LDR", "ADD", "SUB", "AND", "ORR", "JPR", "CMP", 
-			"NOP", "JPM", "JP", "Identifier", "WS", "LINE_COMMENT", "WORD"
+			null, "IntegerLiteral", "LBRACK", "RBRACK", "SEMI", "COLON", "COMMA", 
+			"NEWLINE", "RZ", "R0", "R1", "R2", "R3", "R4", "FL", "R5", "PC", "R7", 
+			"EQ", "MOV", "MOVL", "SETH", "STR", "LDR", "ADD", "SUB", "AND", "ORR", 
+			"JPR", "CMP", "NOP", "JPM", "JP", "WORD", "Identifier", "WS", "LINE_COMMENT"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -125,7 +125,7 @@ public class QuACParser extends Parser {
 			setState(25);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << MOV) | (1L << MOVL) | (1L << SETH) | (1L << STR) | (1L << LDR) | (1L << ADD) | (1L << SUB) | (1L << AND) | (1L << ORR) | (1L << JPR) | (1L << CMP) | (1L << NOP) | (1L << JPM) | (1L << JP) | (1L << Identifier) | (1L << WORD))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << MOV) | (1L << MOVL) | (1L << SETH) | (1L << STR) | (1L << LDR) | (1L << ADD) | (1L << SUB) | (1L << AND) | (1L << ORR) | (1L << JPR) | (1L << CMP) | (1L << NOP) | (1L << JPM) | (1L << JP) | (1L << WORD) | (1L << Identifier))) != 0)) {
 				{
 				{
 				setState(22);
@@ -834,21 +834,21 @@ public class QuACParser extends Parser {
 		"\3\6\3\6\3\7\3\7\3\b\3\b\5\bO\n\b\3\b\3\b\3\b\3\b\3\t\3\t\5\tW\n\t\3\t"+
 		"\3\t\3\n\3\n\5\n]\n\n\3\n\3\n\3\n\3\n\3\13\3\13\5\13e\n\13\3\13\3\13\3"+
 		"\f\3\f\3\f\2\2\r\2\4\6\b\n\f\16\20\22\24\26\2\b\3\2\26\27\3\2\30\31\3"+
-		"\2\32\35\4\2\25\25\37\37\4\2\3\3##\3\2\n\23\2p\2\33\3\2\2\2\4,\3\2\2\2"+
+		"\2\32\35\4\2\25\25\37\37\4\2\3\3$$\3\2\n\23\2p\2\33\3\2\2\2\4,\3\2\2\2"+
 		"\6.\3\2\2\2\b\66\3\2\2\2\n@\3\2\2\2\fJ\3\2\2\2\16L\3\2\2\2\20T\3\2\2\2"+
 		"\22Z\3\2\2\2\24b\3\2\2\2\26h\3\2\2\2\30\32\5\4\3\2\31\30\3\2\2\2\32\35"+
 		"\3\2\2\2\33\31\3\2\2\2\33\34\3\2\2\2\34\36\3\2\2\2\35\33\3\2\2\2\36\37"+
 		"\7\2\2\3\37\3\3\2\2\2 -\5\6\4\2!-\5\b\5\2\"-\5\n\6\2#-\5\f\7\2$-\5\16"+
-		"\b\2%-\5\20\t\2&-\5\22\n\2\'-\5\24\13\2()\7&\2\2)-\7\3\2\2*+\7#\2\2+-"+
+		"\b\2%-\5\20\t\2&-\5\22\n\2\'-\5\24\13\2()\7#\2\2)-\7\3\2\2*+\7$\2\2+-"+
 		"\7\7\2\2, \3\2\2\2,!\3\2\2\2,\"\3\2\2\2,#\3\2\2\2,$\3\2\2\2,%\3\2\2\2"+
 		",&\3\2\2\2,\'\3\2\2\2,(\3\2\2\2,*\3\2\2\2-\5\3\2\2\2.\60\t\2\2\2/\61\7"+
 		"\24\2\2\60/\3\2\2\2\60\61\3\2\2\2\61\62\3\2\2\2\62\63\5\26\f\2\63\64\7"+
-		"\t\2\2\64\65\7\3\2\2\65\7\3\2\2\2\668\t\3\2\2\679\7\24\2\28\67\3\2\2\2"+
-		"89\3\2\2\29:\3\2\2\2:;\5\26\f\2;<\7\t\2\2<=\7\4\2\2=>\5\26\f\2>?\7\5\2"+
+		"\b\2\2\64\65\7\3\2\2\65\7\3\2\2\2\668\t\3\2\2\679\7\24\2\28\67\3\2\2\2"+
+		"89\3\2\2\29:\3\2\2\2:;\5\26\f\2;<\7\b\2\2<=\7\4\2\2=>\5\26\f\2>?\7\5\2"+
 		"\2?\t\3\2\2\2@B\t\4\2\2AC\7\24\2\2BA\3\2\2\2BC\3\2\2\2CD\3\2\2\2DE\5\26"+
-		"\f\2EF\7\t\2\2FG\5\26\f\2GH\7\t\2\2HI\5\26\f\2I\13\3\2\2\2JK\7 \2\2K\r"+
+		"\f\2EF\7\b\2\2FG\5\26\f\2GH\7\b\2\2HI\5\26\f\2I\13\3\2\2\2JK\7 \2\2K\r"+
 		"\3\2\2\2LN\t\5\2\2MO\7\24\2\2NM\3\2\2\2NO\3\2\2\2OP\3\2\2\2PQ\5\26\f\2"+
-		"QR\7\t\2\2RS\5\26\f\2S\17\3\2\2\2TV\7\36\2\2UW\7\24\2\2VU\3\2\2\2VW\3"+
+		"QR\7\b\2\2RS\5\26\f\2S\17\3\2\2\2TV\7\36\2\2UW\7\24\2\2VU\3\2\2\2VW\3"+
 		"\2\2\2WX\3\2\2\2XY\5\26\f\2Y\21\3\2\2\2Z\\\7!\2\2[]\7\24\2\2\\[\3\2\2"+
 		"\2\\]\3\2\2\2]^\3\2\2\2^_\7\4\2\2_`\5\26\f\2`a\7\5\2\2a\23\3\2\2\2bd\7"+
 		"\"\2\2ce\7\24\2\2dc\3\2\2\2de\3\2\2\2ef\3\2\2\2fg\t\6\2\2g\25\3\2\2\2"+

@@ -40,6 +40,7 @@ RBRACK: ']';
 SEMI: ';';
 COLON: ':';
 COMMA: ',';
+NEWLINE: '\n';
 
 // Registers
 RZ: 'rz';
