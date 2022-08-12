@@ -28,7 +28,6 @@ func main() {
 	fmt.Println(listener.Labels)
 
 	var visitor insn.InsnVisitor = insn.NewInsnVisitor(listener.Labels)
-	fmt.Println("Calling visitor")
 	var result []uint16 = visitor.Visit(tree).([]uint16)
 	var bytesResult []byte
 	fmt.Println("RESULT BYTES")
