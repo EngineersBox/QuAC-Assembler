@@ -9,6 +9,11 @@ const (
 	SUB_MASK  = 0b1001 << 12
 	AND_MASK  = 0b1010 << 12
 	ORR_MASK  = 0b1011 << 12
+	MOV_MASK  = 0b1000 << 12
+	JPR_MASK  = 0b1000_0_111 << 8
+	CMP_MASK  = 0b1001 << 12
+	JPM_MASK  = 0b0101_0_111 << 8
+	JP_MASK   = 0b0000_0_111 << 8
 
 	TRUE_CONDITION = 0b00001 << 11
 

@@ -1,24 +1,24 @@
-# QuAC-Compiler
-Compiles QuAC assembly into 16-bit QuAC v1.0 ISA binaries
+# QuAC-Assembler
+Assembles QuAC assembly into 16-bit QuAC v1.0 ISA binaries
 
 ## Build
 
 ```shell
-go build src/compiler.go
+go build src/assembler.go
 ```
 
 ## Usage
 
-You'll need to build the compiler first before doing this, see the above section for details on that.
+You'll need to build the assembler first before doing this, see the above section for details on that.
 
 ```shell
-./compiler <source assembly> <destination binary>
+./assembler <source assembly> <destination binary>
 ```
 
 ### Example
 
 ```shell
-./compiler test.S result.bin
+./assembler test.S result.bin
 ```
 
 This will compile the following assembly

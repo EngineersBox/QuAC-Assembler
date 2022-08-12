@@ -8,119 +8,130 @@ import (
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 
+var (
+	currentOffset uint16 = 0
+)
+
 type InsnVisitor struct {
 	antlr4.QuACParserVisitor
+	labels map[string]uint16
 }
 
-func (v *InsnVisitor) Visit(tree antlr.ParseTree) interface{} {
+func NewInsnVisitor(labels map[string]uint16) InsnVisitor {
+	return InsnVisitor{
+		labels: labels,
+	}
+}
+
+func (this *InsnVisitor) Visit(tree antlr.ParseTree) interface{} {
 	switch val := tree.(type) {
 	case *antlr4.ParseContext:
-		return v.VisitParse(val)
+		return this.VisitParse(val)
 
 	case *antlr4.IFormatStatementContext:
-		return v.VisitIFormatStatement(val)
+		return this.VisitIFormatStatement(val)
 
 	case *antlr4.RMemFormatStatementContext:
-		return v.VisitRMemFormatStatement(val)
+		return this.VisitRMemFormatStatement(val)
 
 	case *antlr4.RALUFormatStatementContext:
-		return v.VisitRALUFormatStatement(val)
+		return this.VisitRALUFormatStatement(val)
 
 	case *antlr4.NopStatementContext:
-		return v.VisitNopStatement(val)
+		return this.VisitNopStatement(val)
 
 	case *antlr4.Pseudo2ParamStatementContext:
-		return v.VisitPseudo2ParamStatement(val)
+		return this.VisitPseudo2ParamStatement(val)
 
 	case *antlr4.JprStatementContext:
-		return v.VisitJprStatement(val)
+		return this.VisitJprStatement(val)
 
 	case *antlr4.JpmStatementContext:
-		return v.VisitJpmStatement(val)
+		return this.VisitJpmStatement(val)
 
 	case *antlr4.JpStatementContext:
-		return v.VisitJpStatement(val)
+		return this.VisitJpStatement(val)
 
 	case *antlr4.WordStatementContext:
-		return v.VisitWordStatement(val)
+		return this.VisitWordStatement(val)
 
 	case *antlr4.LabelStatementContext:
-		return v.VisitLabelStatement(val)
+		return this.VisitLabelStatement(val)
 
 	case *antlr4.IFormatContext:
-		return v.VisitIFormat(val)
+		return this.VisitIFormat(val)
 
 	case *antlr4.RMemFormatContext:
-		return v.VisitRMemFormat(val)
+		return this.VisitRMemFormat(val)
 
 	case *antlr4.RALUFormatContext:
-		return v.VisitRALUFormat(val)
+		return this.VisitRALUFormat(val)
 
 	case *antlr4.NopContext:
-		return v.VisitNop(val)
+		return this.VisitNop(val)
 
 	case *antlr4.Pseudo2ParamContext:
-		return v.VisitPseudo2Param(val)
+		return this.VisitPseudo2Param(val)
 
 	case *antlr4.JprContext:
-		return v.VisitJpr(val)
+		return this.VisitJpr(val)
 
 	case *antlr4.JpmContext:
-		return v.VisitJpm(val)
+		return this.VisitJpm(val)
 
 	case *antlr4.JpContext:
-		return v.VisitJp(val)
+		return this.VisitJp(val)
 
 	case *antlr4.RegisterContext:
-		return v.VisitRegister(val)
+		return this.VisitRegister(val)
 	default:
 		panic("Unknown context")
 	}
 }
 
-func (v *InsnVisitor) VisitParse(ctx *antlr4.ParseContext) interface{} {
+func (this *InsnVisitor) VisitParse(ctx *antlr4.ParseContext) interface{} {
 	var result []uint16 = make([]uint16, 0)
 	for _, statement := range ctx.AllStatement() {
-		val := v.Visit(statement)
+		val := this.Visit(statement)
 		fmt.Println(val)
 		result = append(result, val.([]uint16)...)
 	}
 	return result
 }
 
-func (v *InsnVisitor) VisitIFormatStatement(ctx *antlr4.IFormatStatementContext) interface{} {
-	return v.Visit(ctx.IFormat())
+func (this *InsnVisitor) VisitIFormatStatement(ctx *antlr4.IFormatStatementContext) interface{} {
+	return this.Visit(ctx.IFormat())
 }
 
-func (v *InsnVisitor) VisitRMemFormatStatement(ctx *antlr4.RMemFormatStatementContext) interface{} {
-	return v.Visit(ctx.RMemFormat())
+func (this *InsnVisitor) VisitRMemFormatStatement(ctx *antlr4.RMemFormatStatementContext) interface{} {
+	return this.Visit(ctx.RMemFormat())
 }
 
-func (v *InsnVisitor) VisitRALUFormatStatement(ctx *antlr4.RALUFormatStatementContext) interface{} {
-	return v.Visit(ctx.RALUFormat())
+func (this *InsnVisitor) VisitRALUFormatStatement(ctx *antlr4.RALUFormatStatementContext) interface{} {
+	return this.Visit(ctx.RALUFormat())
 }
 
-func (v *InsnVisitor) VisitNopStatement(ctx *antlr4.NopStatementContext) interface{} {
-	return v.Visit(ctx.Nop())
+func (this *InsnVisitor) VisitNopStatement(ctx *antlr4.NopStatementContext) interface{} {
+	return this.Visit(ctx.Nop())
 }
 
-func (v *InsnVisitor) VisitPseudo2ParamStatement(ctx *antlr4.Pseudo2ParamStatementContext) interface{} {
-	return v.Visit(ctx.Pseudo2Param())
+func (this *InsnVisitor) VisitPseudo2ParamStatement(ctx *antlr4.Pseudo2ParamStatementContext) interface{} {
+	return this.Visit(ctx.Pseudo2Param())
 }
 
-func (v *InsnVisitor) VisitJprStatement(ctx *antlr4.JprStatementContext) interface{} {
-	return v.Visit(ctx.Jpr())
+func (this *InsnVisitor) VisitJprStatement(ctx *antlr4.JprStatementContext) interface{} {
+	return this.Visit(ctx.Jpr())
 }
 
-func (v *InsnVisitor) VisitJpmStatement(ctx *antlr4.JpmStatementContext) interface{} {
-	return v.Visit(ctx.Jpm())
+func (this *InsnVisitor) VisitJpmStatement(ctx *antlr4.JpmStatementContext) interface{} {
+	return this.Visit(ctx.Jpm())
 }
 
-func (v *InsnVisitor) VisitJpStatement(ctx *antlr4.JpStatementContext) interface{} {
-	return v.Visit(ctx.Jp())
+func (this *InsnVisitor) VisitJpStatement(ctx *antlr4.JpStatementContext) interface{} {
+	return this.Visit(ctx.Jp())
 }
 
-func (v *InsnVisitor) VisitWordStatement(ctx *antlr4.WordStatementContext) interface{} {
+func (this *InsnVisitor) VisitWordStatement(ctx *antlr4.WordStatementContext) interface{} {
 	val, err := strconv.ParseInt(ctx.IntegerLiteral().GetText(), 0, 16)
 	if err != nil {
 		panic(err)
@@ -128,11 +139,11 @@ func (v *InsnVisitor) VisitWordStatement(ctx *antlr4.WordStatementContext) inter
 	return []uint16{uint16(val)}
 }
 
-func (v *InsnVisitor) VisitLabelStatement(ctx *antlr4.LabelStatementContext) interface{} {
+func (this *InsnVisitor) VisitLabelStatement(ctx *antlr4.LabelStatementContext) interface{} {
 	return make([]uint16, 0)
 }
 
-func (v *InsnVisitor) VisitIFormat(ctx *antlr4.IFormatContext) interface{} {
+func (this *InsnVisitor) VisitIFormat(ctx *antlr4.IFormatContext) interface{} {
 	var result uint16
 	if ctx.MOVL() != nil {
 		result = MOVL_MASK
@@ -144,7 +155,7 @@ func (v *InsnVisitor) VisitIFormat(ctx *antlr4.IFormatContext) interface{} {
 	if ctx.EQ() != nil {
 		result |= TRUE_CONDITION
 	}
-	var rd uint16 = v.Visit(ctx.Register()).(uint16)
+	var rd uint16 = this.Visit(ctx.Register()).(uint16)
 	result |= rd << 8
 	imm8, err := parseImm8(ctx.IntegerLiteral().GetText())
 	if err != nil {
@@ -155,7 +166,7 @@ func (v *InsnVisitor) VisitIFormat(ctx *antlr4.IFormatContext) interface{} {
 	return []uint16{result}
 }
 
-func (v *InsnVisitor) VisitRMemFormat(ctx *antlr4.RMemFormatContext) interface{} {
+func (this *InsnVisitor) VisitRMemFormat(ctx *antlr4.RMemFormatContext) interface{} {
 	var result uint16
 	if ctx.STR() != nil {
 		result = STR_MASK
@@ -171,13 +182,13 @@ func (v *InsnVisitor) VisitRMemFormat(ctx *antlr4.RMemFormatContext) interface{}
 	if len(registers) != 2 {
 		panic(fmt.Errorf("Expected 2 registers (rd, ra), got %d", len(registers)))
 	}
-	result |= v.Visit(registers[0]).(uint16) << RD_REGISTER_OFFSET
-	result |= v.Visit(registers[1]).(uint16) << RA_REGISTER_OFFSET
+	result |= this.Visit(registers[0]).(uint16) << RD_REGISTER_OFFSET
+	result |= this.Visit(registers[1]).(uint16) << RA_REGISTER_OFFSET
 	fmt.Printf("R-Format Mem: %016b\n", result)
 	return []uint16{result}
 }
 
-func (v *InsnVisitor) VisitRALUFormat(ctx *antlr4.RALUFormatContext) interface{} {
+func (this *InsnVisitor) VisitRALUFormat(ctx *antlr4.RALUFormatContext) interface{} {
 	var result uint16
 	if ctx.ADD() != nil {
 		result = ADD_MASK
@@ -197,9 +208,9 @@ func (v *InsnVisitor) VisitRALUFormat(ctx *antlr4.RALUFormatContext) interface{}
 	if len(registers) != 3 {
 		panic(fmt.Errorf("Expected 3 registers (rd, ra, rb), got %d", len(registers)))
 	}
-	result |= v.Visit(registers[0]).(uint16) << RD_REGISTER_OFFSET
-	result |= v.Visit(registers[1]).(uint16) << RA_REGISTER_OFFSET
-	result |= v.Visit(registers[2]).(uint16) << RB_REGISTER_OFFSET
+	result |= this.Visit(registers[0]).(uint16) << RD_REGISTER_OFFSET
+	result |= this.Visit(registers[1]).(uint16) << RA_REGISTER_OFFSET
+	result |= this.Visit(registers[2]).(uint16) << RB_REGISTER_OFFSET
 	fmt.Printf("R-Format ALU: %016b\n", result)
 	return []uint16{result}
 }
@@ -208,23 +219,75 @@ func (v *InsnVisitor) VisitNop(ctx *antlr4.NopContext) interface{} {
 	return make([]uint16, 0)
 }
 
-func (v *InsnVisitor) VisitPseudo2Param(ctx *antlr4.Pseudo2ParamContext) interface{} {
+func (this *InsnVisitor) VisitPseudo2Param(ctx *antlr4.Pseudo2ParamContext) interface{} {
+	var result uint16
+	if ctx.MOV() != nil {
+		result = MOV_MASK
+	} else if ctx.CMP() != nil {
+		result = CMP_MASK
+	} else {
+		panic("Invalid mov/cmp instruction")
+	}
+	if ctx.EQ() != nil {
+		result |= TRUE_CONDITION
+	}
+	var registers []antlr4.IRegisterContext = ctx.AllRegister()
+	if len(registers) != 2 {
+		panic(fmt.Errorf("Expected 2 registers (rd, ra), got %d", len(registers)))
+	}
+	if ctx.MOV() != nil {
+		result |= this.Visit(registers[0]).(uint16) << RD_REGISTER_OFFSET
+		result |= this.Visit(registers[1]).(uint16) << RA_REGISTER_OFFSET
+	} else if ctx.CMP() != nil {
+		result |= this.Visit(registers[0]).(uint16) << RA_REGISTER_OFFSET
+		result |= this.Visit(registers[1]).(uint16) << RB_REGISTER_OFFSET
+	}
+	return []uint16{result}
+}
+
+func (this *InsnVisitor) VisitJpr(ctx *antlr4.JprContext) interface{} {
+	var result uint16 = JPR_MASK
+	if ctx.EQ() != nil {
+		result |= TRUE_CONDITION
+	}
+	result |= this.Visit(ctx.Register()).(uint16) << RA_REGISTER_OFFSET
+	return []uint16{result}
+}
+
+func (this *InsnVisitor) VisitJpm(ctx *antlr4.JpmContext) interface{} {
+	var result uint16 = JPM_MASK
+	if ctx.EQ() != nil {
+		result |= TRUE_CONDITION
+	}
+	result |= this.Visit(ctx.Register()).(uint16) << RA_REGISTER_OFFSET
+	return []uint16{result}
+}
+
+func (this *InsnVisitor) VisitJp(ctx *antlr4.JpContext) interface{} {
+	var result uint16 = JP_MASK
+	if ctx.EQ() != nil {
+		result |= TRUE_CONDITION
+	}
+	if ctx.IntegerLiteral() != nil {
+		imm8, err := parseImm8(ctx.IntegerLiteral().GetText())
+		if err != nil {
+			panic(fmt.Errorf("Bad immediate 8-bit format: %s", err))
+		}
+		result |= uint16(imm8)
+	} else if ctx.Identifier() != nil {
+		offset, ok := this.labels[ctx.Identifier().GetText()]
+		if !ok {
+			panic(fmt.Errorf("No label declared with name \"%s\"", ctx.Identifier().GetText()))
+		}
+		result |= offset
+	} else {
+		panic("Invalid jp instruction, expected a register or immediate 8-bit value")
+	}
+	fmt.Printf("Jp %016b\n", result)
 	return make([]uint16, 0)
 }
 
-func (v *InsnVisitor) VisitJpr(ctx *antlr4.JprContext) interface{} {
-	return make([]uint16, 0)
-}
-
-func (v *InsnVisitor) VisitJpm(ctx *antlr4.JpmContext) interface{} {
-	return make([]uint16, 0)
-}
-
-func (v *InsnVisitor) VisitJp(ctx *antlr4.JpContext) interface{} {
-	return make([]uint16, 0)
-}
-
-func (v *InsnVisitor) VisitRegister(ctx *antlr4.RegisterContext) interface{} {
+func (this *InsnVisitor) VisitRegister(ctx *antlr4.RegisterContext) interface{} {
 	if ctx.RZ() != nil || ctx.R0() != nil {
 		return uint16(0b000)
 	} else if ctx.R1() != nil {
