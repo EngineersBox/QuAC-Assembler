@@ -32,8 +32,12 @@ func main() {
 	var bytesResult []byte
 	fmt.Println("RESULT BYTES")
 	for _, asmCommand := range result {
-		fmt.Printf("0b%04x\n", asmCommand)
+		fmt.Printf("0x%04x\n", asmCommand)
 		bytesResult = append(bytesResult, byte((asmCommand&0xFF00)>>8), byte(asmCommand&0x00FF))
+	}
+	fmt.Println("APPENDED BYTES")
+	for _, b := range bytesResult {
+		fmt.Printf("0x%02x\n", b)
 	}
 
 	outFile, err := os.Create(args[1])
@@ -42,6 +46,7 @@ func main() {
 	}
 	defer outFile.Close()
 
+	// For some reason this re-orders bytes, but only the first 8 bytes over the 16 byte theshold.. possible bug?
 	_, err = outFile.Write(bytesResult)
 	if err != nil {
 		panic(err)
