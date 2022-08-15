@@ -74,7 +74,7 @@ func (this *InsnVisitor) VisitParse(ctx *antlr4.ParseContext) interface{} {
 	var result []uint16 = make([]uint16, 0)
 	for _, statement := range ctx.AllStatement() {
 		val := this.Visit(statement)
-		fmt.Println(val)
+		fmt.Printf("%04x\n", val)
 		result = append(result, val.([]uint16)...)
 	}
 	return result
@@ -265,7 +265,7 @@ func (this *InsnVisitor) VisitJp(ctx *antlr4.JpContext) interface{} {
 		panic("Invalid jp instruction, expected a register or immediate 8-bit value")
 	}
 	fmt.Printf("Jp %016b\n", result)
-	return make([]uint16, 0)
+	return []uint16{result}
 }
 
 func (this *InsnVisitor) VisitRegister(ctx *antlr4.RegisterContext) interface{} {
