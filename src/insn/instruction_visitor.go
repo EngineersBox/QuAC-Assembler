@@ -27,61 +27,42 @@ func (this *InsnVisitor) Visit(tree antlr.ParseTree) interface{} {
 	switch val := tree.(type) {
 	case *antlr4.ParseContext:
 		return this.VisitParse(val)
-
 	case *antlr4.IFormatStatementContext:
 		return this.VisitIFormatStatement(val)
-
 	case *antlr4.RMemFormatStatementContext:
 		return this.VisitRMemFormatStatement(val)
-
 	case *antlr4.RALUFormatStatementContext:
 		return this.VisitRALUFormatStatement(val)
-
 	case *antlr4.NopStatementContext:
 		return this.VisitNopStatement(val)
-
 	case *antlr4.Pseudo2ParamStatementContext:
 		return this.VisitPseudo2ParamStatement(val)
-
 	case *antlr4.JprStatementContext:
 		return this.VisitJprStatement(val)
-
 	case *antlr4.JpmStatementContext:
 		return this.VisitJpmStatement(val)
-
 	case *antlr4.JpStatementContext:
 		return this.VisitJpStatement(val)
-
 	case *antlr4.WordStatementContext:
 		return this.VisitWordStatement(val)
-
 	case *antlr4.LabelStatementContext:
 		return this.VisitLabelStatement(val)
-
 	case *antlr4.IFormatContext:
 		return this.VisitIFormat(val)
-
 	case *antlr4.RMemFormatContext:
 		return this.VisitRMemFormat(val)
-
 	case *antlr4.RALUFormatContext:
 		return this.VisitRALUFormat(val)
-
 	case *antlr4.NopContext:
 		return this.VisitNop(val)
-
 	case *antlr4.Pseudo2ParamContext:
 		return this.VisitPseudo2Param(val)
-
 	case *antlr4.JprContext:
 		return this.VisitJpr(val)
-
 	case *antlr4.JpmContext:
 		return this.VisitJpm(val)
-
 	case *antlr4.JpContext:
 		return this.VisitJp(val)
-
 	case *antlr4.RegisterContext:
 		return this.VisitRegister(val)
 	default:
