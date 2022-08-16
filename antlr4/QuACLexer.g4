@@ -54,25 +54,25 @@ R5: 'r5';
 PC: 'pc';
 R7: 'r7';
 
-// Conditions
-EQ: 'eq';
-
 // Insns
-MOV: 'mov';
-MOVL: 'movl';
-SETH: 'seth';
-STR: 'str';
-LDR: 'ldr';
-ADD: 'add';
-SUB: 'sub';
-AND: 'and';
-ORR: 'orr';
-JPR: 'jpr';
-CMP: 'cmp';
+MOV: 'mov' EQ?;
+MOVL: 'movl' EQ?;
+SETH: 'seth' EQ?;
+STR: 'str' EQ?;
+LDR: 'ldr' EQ?;
+ADD: 'add' EQ?;
+SUB: 'sub' EQ?;
+AND: 'and' EQ?;
+ORR: 'orr' EQ?;
+JPR: 'jpr' EQ?;
+CMP: 'cmp' EQ?;
 NOP: 'nop';
-JPM: 'jpm';
-JP: 'jp';
+JPM: 'jpm' EQ?;
+JP: 'jp' EQ?;
 WORD: '.word';
+
+// Conditions
+fragment EQ: 'eq';
 
 // Identifiers (must appear after all keywords in the grammar)
 Identifier: Letter LetterOrDigit*;

@@ -120,17 +120,21 @@ func (this *InsnVisitor) VisitLabelStatement(ctx *antlr4.LabelStatementContext) 
 	return make([]uint16, 0)
 }
 
+func maskCondition(result uint16, node antlr.TerminalNode) uint16 {
+	if len(node.GetChildren()) > 0 {
+		return result | TRUE_CONDITION
+	}
+	return result
+}
+
 func (this *InsnVisitor) VisitIFormat(ctx *antlr4.IFormatContext) interface{} {
 	var result uint16
-	if ctx.MOVL() != nil {
-		result = MOVL_MASK
-	} else if ctx.SETH() != nil {
-		result = SETH_MASK
+	if movl := ctx.MOVL(); movl != nil {
+		result = maskCondition(MOVL_MASK, movl)
+	} else if seth := ctx.SETH(); seth != nil {
+		result = maskCondition(SETH_MASK, seth)
 	} else {
 		panic("Invalid I-Format instruction")
-	}
-	if ctx.EQ() != nil {
-		result |= TRUE_CONDITION
 	}
 	var rd uint16 = this.Visit(ctx.Register()).(uint16)
 	result |= rd << 8
@@ -145,15 +149,12 @@ func (this *InsnVisitor) VisitIFormat(ctx *antlr4.IFormatContext) interface{} {
 
 func (this *InsnVisitor) VisitRMemFormat(ctx *antlr4.RMemFormatContext) interface{} {
 	var result uint16
-	if ctx.STR() != nil {
-		result = STR_MASK
-	} else if ctx.LDR() != nil {
-		result = LDR_MASK
+	if str := ctx.STR(); str != nil {
+		result = maskCondition(STR_MASK, str)
+	} else if ldr := ctx.LDR(); ldr != nil {
+		result = maskCondition(LDR_MASK, ldr)
 	} else {
 		panic("Invalid R-Format memory instruction")
-	}
-	if ctx.EQ() != nil {
-		result |= TRUE_CONDITION
 	}
 	var registers []antlr4.IRegisterContext = ctx.AllRegister()
 	if len(registers) != 2 {
@@ -167,19 +168,16 @@ func (this *InsnVisitor) VisitRMemFormat(ctx *antlr4.RMemFormatContext) interfac
 
 func (this *InsnVisitor) VisitRALUFormat(ctx *antlr4.RALUFormatContext) interface{} {
 	var result uint16
-	if ctx.ADD() != nil {
-		result = ADD_MASK
-	} else if ctx.SUB() != nil {
-		result = SUB_MASK
-	} else if ctx.AND() != nil {
-		result = AND_MASK
-	} else if ctx.ORR() != nil {
-		result = ORR_MASK
+	if add := ctx.ADD(); add != nil {
+		result = maskCondition(ADD_MASK, add)
+	} else if sub := ctx.SUB(); sub != nil {
+		result = maskCondition(SUB_MASK, add)
+	} else if and := ctx.AND(); and != nil {
+		result = maskCondition(AND_MASK, add)
+	} else if orr := ctx.ORR(); orr != nil {
+		result = maskCondition(ORR_MASK, add)
 	} else {
 		panic("Invalid R-Format ALU instruction")
-	}
-	if ctx.EQ() != nil {
-		result |= TRUE_CONDITION
 	}
 	var registers []antlr4.IRegisterContext = ctx.AllRegister()
 	if len(registers) != 3 {
@@ -198,15 +196,12 @@ func (v *InsnVisitor) VisitNop(ctx *antlr4.NopContext) interface{} {
 
 func (this *InsnVisitor) VisitPseudo2Param(ctx *antlr4.Pseudo2ParamContext) interface{} {
 	var result uint16
-	if ctx.MOV() != nil {
-		result = MOV_MASK
-	} else if ctx.CMP() != nil {
-		result = CMP_MASK
+	if mov := ctx.MOV(); mov != nil {
+		result = maskCondition(MOV_MASK, mov)
+	} else if cmp := ctx.CMP(); cmp != nil {
+		result = maskCondition(CMP_MASK, cmp)
 	} else {
 		panic("Invalid mov/cmp instruction")
-	}
-	if ctx.EQ() != nil {
-		result |= TRUE_CONDITION
 	}
 	var registers []antlr4.IRegisterContext = ctx.AllRegister()
 	if len(registers) != 2 {
@@ -223,28 +218,19 @@ func (this *InsnVisitor) VisitPseudo2Param(ctx *antlr4.Pseudo2ParamContext) inte
 }
 
 func (this *InsnVisitor) VisitJpr(ctx *antlr4.JprContext) interface{} {
-	var result uint16 = JPR_MASK
-	if ctx.EQ() != nil {
-		result |= TRUE_CONDITION
-	}
+	var result uint16 = maskCondition(JPR_MASK, ctx.JPR())
 	result |= this.Visit(ctx.Register()).(uint16) << RA_REGISTER_OFFSET
 	return []uint16{result}
 }
 
 func (this *InsnVisitor) VisitJpm(ctx *antlr4.JpmContext) interface{} {
-	var result uint16 = JPM_MASK
-	if ctx.EQ() != nil {
-		result |= TRUE_CONDITION
-	}
+	var result uint16 = maskCondition(JPM_MASK, ctx.JPM())
 	result |= this.Visit(ctx.Register()).(uint16) << RA_REGISTER_OFFSET
 	return []uint16{result}
 }
 
 func (this *InsnVisitor) VisitJp(ctx *antlr4.JpContext) interface{} {
-	var result uint16 = JP_MASK
-	if ctx.EQ() != nil {
-		result |= TRUE_CONDITION
-	}
+	var result uint16 = maskCondition(JP_MASK, ctx.JP())
 	if ctx.IntegerLiteral() != nil {
 		imm8, err := parseImm8(ctx.IntegerLiteral().GetText())
 		if err != nil {
