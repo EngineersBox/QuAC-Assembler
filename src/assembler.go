@@ -30,14 +30,10 @@ func main() {
 	var visitor insn.InsnVisitor = insn.NewInsnVisitor(listener.Labels)
 	var result []uint16 = visitor.Visit(tree).([]uint16)
 	var bytesResult []byte
-	fmt.Println("RESULT BYTES")
+	//fmt.Println("RESULT BYTES")
 	for _, asmCommand := range result {
-		fmt.Printf("0x%04x\n", asmCommand)
+		//fmt.Printf("0x%04x\n", asmCommand)
 		bytesResult = append(bytesResult, byte((asmCommand&0xFF00)>>8), byte(asmCommand&0x00FF))
-	}
-	fmt.Println("APPENDED BYTES")
-	for _, b := range bytesResult {
-		fmt.Printf("0x%02x\n", b)
 	}
 
 	outFile, err := os.Create(args[1])
@@ -51,7 +47,7 @@ func main() {
 		}
 	}(outFile)
 
-	// For some reason this re-orders bytes, but only the first 8 bytes over the 16 byte theshold.. possible bug?
+	// In go 1.16 for some reason this re-orders bytes, but only the first 8 bytes over the 16 byte threshold. This is fixed in go1.17 and above
 	_, err = outFile.Write(bytesResult)
 	if err != nil {
 		panic(err)
