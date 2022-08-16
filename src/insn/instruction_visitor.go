@@ -136,7 +136,7 @@ func (this *InsnVisitor) VisitIFormat(ctx *antlr4.IFormatContext) interface{} {
 	result |= rd << 8
 	imm8, err := parseImm8(ctx.IntegerLiteral().GetText())
 	if err != nil {
-		panic(fmt.Errorf("Bad immediate 8-bit format: %s", err))
+		panic(fmt.Errorf("bad immediate 8-bit format: %s", err))
 	}
 	result |= uint16(imm8)
 	fmt.Printf("I-Format: %016b\n", result)
@@ -157,7 +157,7 @@ func (this *InsnVisitor) VisitRMemFormat(ctx *antlr4.RMemFormatContext) interfac
 	}
 	var registers []antlr4.IRegisterContext = ctx.AllRegister()
 	if len(registers) != 2 {
-		panic(fmt.Errorf("Expected 2 registers (rd, ra), got %d", len(registers)))
+		panic(fmt.Errorf("expected 2 registers (rd, ra), got %d", len(registers)))
 	}
 	result |= this.Visit(registers[0]).(uint16) << RD_REGISTER_OFFSET
 	result |= this.Visit(registers[1]).(uint16) << RA_REGISTER_OFFSET
@@ -183,7 +183,7 @@ func (this *InsnVisitor) VisitRALUFormat(ctx *antlr4.RALUFormatContext) interfac
 	}
 	var registers []antlr4.IRegisterContext = ctx.AllRegister()
 	if len(registers) != 3 {
-		panic(fmt.Errorf("Expected 3 registers (rd, ra, rb), got %d", len(registers)))
+		panic(fmt.Errorf("expected 3 registers (rd, ra, rb), got %d", len(registers)))
 	}
 	result |= this.Visit(registers[0]).(uint16) << RD_REGISTER_OFFSET
 	result |= this.Visit(registers[1]).(uint16) << RA_REGISTER_OFFSET
@@ -210,7 +210,7 @@ func (this *InsnVisitor) VisitPseudo2Param(ctx *antlr4.Pseudo2ParamContext) inte
 	}
 	var registers []antlr4.IRegisterContext = ctx.AllRegister()
 	if len(registers) != 2 {
-		panic(fmt.Errorf("Expected 2 registers (rd, ra), got %d", len(registers)))
+		panic(fmt.Errorf("expected 2 registers (rd, ra), got %d", len(registers)))
 	}
 	if ctx.MOV() != nil {
 		result |= this.Visit(registers[0]).(uint16) << RD_REGISTER_OFFSET
@@ -248,13 +248,13 @@ func (this *InsnVisitor) VisitJp(ctx *antlr4.JpContext) interface{} {
 	if ctx.IntegerLiteral() != nil {
 		imm8, err := parseImm8(ctx.IntegerLiteral().GetText())
 		if err != nil {
-			panic(fmt.Errorf("Bad immediate 8-bit format: %s", err))
+			panic(fmt.Errorf("bad immediate 8-bit format: %s", err))
 		}
 		result |= uint16(imm8)
 	} else if ctx.Identifier() != nil {
 		offset, ok := this.labels[ctx.Identifier().GetText()]
 		if !ok {
-			panic(fmt.Errorf("No label declared with name \"%s\"", ctx.Identifier().GetText()))
+			panic(fmt.Errorf("no label declared with name \"%s\"", ctx.Identifier().GetText()))
 		}
 		result |= offset
 	} else {
