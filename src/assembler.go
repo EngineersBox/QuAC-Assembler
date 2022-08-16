@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/EngineersBox/QuAC-Compiler/antlr4"
@@ -25,14 +24,11 @@ func main() {
 
 	listener := insn.NewLabelListener()
 	antlr.ParseTreeWalkerDefault.Walk(listener, tree)
-	fmt.Println(listener.Labels)
 
 	var visitor insn.InsnVisitor = insn.NewInsnVisitor(listener.Labels)
 	var result []uint16 = visitor.Visit(tree).([]uint16)
 	var bytesResult []byte
-	//fmt.Println("RESULT BYTES")
 	for _, asmCommand := range result {
-		//fmt.Printf("0x%04x\n", asmCommand)
 		bytesResult = append(bytesResult, byte((asmCommand&0xFF00)>>8), byte(asmCommand&0x00FF))
 	}
 

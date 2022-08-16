@@ -70,7 +70,6 @@ func (this *InsnVisitor) VisitParse(ctx *antlr4.ParseContext) interface{} {
 	var result []uint16 = make([]uint16, 0)
 	for _, statement := range ctx.AllStatement() {
 		val := this.Visit(statement)
-		fmt.Printf("%04x\n", val)
 		result = append(result, val.([]uint16)...)
 	}
 	return result
@@ -143,7 +142,6 @@ func (this *InsnVisitor) VisitIFormat(ctx *antlr4.IFormatContext) interface{} {
 		panic(fmt.Errorf("bad immediate 8-bit format: %s", err))
 	}
 	result |= uint16(imm8)
-	fmt.Printf("I-Format: %016b\n", result)
 	return []uint16{result}
 }
 
@@ -162,7 +160,6 @@ func (this *InsnVisitor) VisitRMemFormat(ctx *antlr4.RMemFormatContext) interfac
 	}
 	result |= this.Visit(registers[0]).(uint16) << RD_REGISTER_OFFSET
 	result |= this.Visit(registers[1]).(uint16) << RA_REGISTER_OFFSET
-	fmt.Printf("R-Format Mem: %016b\n", result)
 	return []uint16{result}
 }
 
@@ -186,7 +183,6 @@ func (this *InsnVisitor) VisitRALUFormat(ctx *antlr4.RALUFormatContext) interfac
 	result |= this.Visit(registers[0]).(uint16) << RD_REGISTER_OFFSET
 	result |= this.Visit(registers[1]).(uint16) << RA_REGISTER_OFFSET
 	result |= this.Visit(registers[2]).(uint16) << RB_REGISTER_OFFSET
-	fmt.Printf("R-Format ALU: %016b\n", result)
 	return []uint16{result}
 }
 
@@ -246,7 +242,6 @@ func (this *InsnVisitor) VisitJp(ctx *antlr4.JpContext) interface{} {
 	} else {
 		panic("Invalid jp instruction, expected a register or immediate 8-bit value")
 	}
-	fmt.Printf("Jp %016b\n", result)
 	return []uint16{result}
 }
 
