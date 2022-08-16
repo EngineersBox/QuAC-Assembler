@@ -8,10 +8,6 @@ import (
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 )
 
-var (
-	currentOffset uint16 = 0
-)
-
 type InsnVisitor struct {
 	antlr4.QuACParserVisitor
 	labels map[string]uint16

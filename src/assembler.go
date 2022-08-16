@@ -44,7 +44,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	defer outFile.Close()
+	defer func(outFile *os.File) {
+		err := outFile.Close()
+		if err != nil {
+
+		}
+	}(outFile)
 
 	// For some reason this re-orders bytes, but only the first 8 bytes over the 16 byte theshold.. possible bug?
 	_, err = outFile.Write(bytesResult)
