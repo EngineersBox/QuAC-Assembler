@@ -3,6 +3,7 @@ package insn
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/EngineersBox/QuAC-Compiler/antlr4"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
@@ -120,7 +121,7 @@ func (this *InsnVisitor) VisitLabelStatement(ctx *antlr4.LabelStatementContext) 
 }
 
 func maskCondition(result uint16, node antlr.TerminalNode) uint16 {
-	if len(node.GetChildren()) > 0 {
+	if strings.HasSuffix(node.GetText(), "eq") {
 		return result | TRUE_CONDITION
 	}
 	return result
