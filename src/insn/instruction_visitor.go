@@ -116,7 +116,7 @@ func (this *InsnVisitor) VisitWordStatement(ctx *antlr4.WordStatementContext) in
 	return []uint16{uint16(val)}
 }
 
-func (this *InsnVisitor) VisitLabelStatement(ctx *antlr4.LabelStatementContext) interface{} {
+func (this *InsnVisitor) VisitLabelStatement(_ *antlr4.LabelStatementContext) interface{} {
 	return make([]uint16, 0)
 }
 
@@ -187,7 +187,7 @@ func (this *InsnVisitor) VisitRALUFormat(ctx *antlr4.RALUFormatContext) interfac
 	return []uint16{result}
 }
 
-func (v *InsnVisitor) VisitNop(ctx *antlr4.NopContext) interface{} {
+func (v *InsnVisitor) VisitNop(_ *antlr4.NopContext) interface{} {
 	return make([]uint16, 0)
 }
 
