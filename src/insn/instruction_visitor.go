@@ -169,11 +169,11 @@ func (this *InsnVisitor) VisitRALUFormat(ctx *antlr4.RALUFormatContext) interfac
 	if add := ctx.ADD(); add != nil {
 		result = maskCondition(ADD_MASK, add)
 	} else if sub := ctx.SUB(); sub != nil {
-		result = maskCondition(SUB_MASK, add)
+		result = maskCondition(SUB_MASK, sub)
 	} else if and := ctx.AND(); and != nil {
-		result = maskCondition(AND_MASK, add)
+		result = maskCondition(AND_MASK, and)
 	} else if orr := ctx.ORR(); orr != nil {
-		result = maskCondition(ORR_MASK, add)
+		result = maskCondition(ORR_MASK, orr)
 	} else {
 		panic("Invalid R-Format ALU instruction")
 	}
