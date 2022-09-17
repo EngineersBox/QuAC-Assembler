@@ -1,3 +1,6 @@
 assembler
 /.idea/
 /gen/
+/antlr4/.antlr
+compiled.bin
+test.S
