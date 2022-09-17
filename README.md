@@ -32,8 +32,7 @@ test:
 add r3, r3, r2
 str r3, [r1]
 jpeq test
-.word 0
-.word 0
+nop
 .word 0
 .word 0
 .word 0xFF
