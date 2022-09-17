@@ -1,7 +1,18 @@
 # QuAC-Assembler
 Assembles QuAC assembly into 16-bit QuAC v1.0 ISA binaries
 
-## Build
+The specification for QuAC v1.0 can be found here: <https://comp.anu.edu.au/courses/comp3710-uarch/resources/08-QuAC-ISA>
+
+## Installation
+
+The standard installation can be done with `install.sh` which will build the assembler into a binary
+and store it in `/usr/bin/quac_assembler`.
+
+```shell
+./install.sh
+```
+
+If you want to build from source, simply run the following.
 
 ```shell
 go build src/assembler.go
@@ -12,13 +23,13 @@ go build src/assembler.go
 You'll need to build the assembler first before doing this, see the above section for details on that.
 
 ```shell
-./assembler <source assembly> <destination binary>
+quac_assembler <source assembly> <destination binary>
 ```
 
 ### Example
 
 ```shell
-./assembler test.S result.bin
+quac_assembler test.S result.bin
 ```
 
 This will compile the following assembly
