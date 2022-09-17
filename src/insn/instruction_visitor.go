@@ -117,7 +117,7 @@ func (this *InsnVisitor) VisitWordStatement(ctx *antlr4.WordStatementContext) in
 }
 
 func (this *InsnVisitor) VisitLabelStatement(_ *antlr4.LabelStatementContext) interface{} {
-	return make([]uint16, 0)
+	return []uint16{0, 0}
 }
 
 func maskCondition(result uint16, node antlr.TerminalNode) uint16 {
